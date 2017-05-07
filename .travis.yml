@@ -13,7 +13,8 @@ install:
 
   # Manually add the Arduino JSON Library to the correct folder
   - git clone https://github.com/bblanchon/ArduinoJson /usr/local/share/arduino/libraries/ArduinoJson
-
+  # Use the Arduino IDE to add some required libraries
+  - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266
   - arduino --board esp8266:esp8266:generic --save-prefs
