@@ -10,21 +10,29 @@ before_install:
 install:
   # Add the esp8266 to the boardmanager <- basically download the appropriate compilers
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
-
   # Manually add the Arduino JSON Library to the correct folder
   - git clone https://github.com/bblanchon/ArduinoJson /usr/local/share/arduino/libraries/ArduinoJson
   # Use the Arduino IDE to add some required libraries
   - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
-  - arduino --install-boards esp8266:esp8266
+  - arduino --install-boards esp8266:esp8266 --save-prefs
   - arduino --board esp8266:esp8266:generic --save-prefs
   # Set compiler Warnings
-  - arduino --pref "compiler.warning_level=all" --save-prefs
+  - arduino --pref "compiler.warning_level=debug, custom_CpuFrequency=generic_80, custom_Debug=generic_Disabled, custom_DebugLevel=generic_None____, custom_FlashFreq=generic_40, custom_FlashMode=generic_dio, custom_FlashSize=generic_4M3M, custom_ResetMethod=generic_nodemcu, custom_UploadSpeed=generic_115200" --save-prefs
+
+  #custom_Debug=generic_Disabled
+  #custom_DebugLevel=generic_None____
+  #custom_FlashFreq=generic_40
+  #custom_FlashMode=generic_dio
+  #custom_FlashSize=generic_4M3M
+  #custom_ResetMethod=generic_nodemcu
+  #custom_UploadSpeed=generic_115200
 script:
   - "echo $PWD"
   - "echo $HOME"
   - "ls $PWD"
-  - source $TRAVIS_BUILD_DIR/travis/common.sh
+  #- source $TRAVIS_BUILD_DIR/travis/common.sh
+  - "echo Starting the Build"
   - arduino --verify $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino
 #  - build_examples
 #  - "cat $PWD/examples/AutoConnect/AutoConnect.ino"
