@@ -10,7 +10,7 @@ function verify_image()
   local filename="/src/WiFiSensor/WiFiSensor.ino"
   local sketch="$directory/$filename"
 
-  echo "'$PWD'/src/WiFiSensor/WiFiSensor.ino"
+  echo "$PWD/src/WiFiSensor/WiFiSensor.ino"
   build_stdout=$(arduino --verify $sketch 2>&1)
 
   # echo output if the build failed
