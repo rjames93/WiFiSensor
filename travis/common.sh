@@ -5,7 +5,8 @@ function verify_image()
   # track the exit code for this platform
   local exit_code=0
   local build_stdout
-  build_stdout=$(arduino --verify '$PWD'/src/WiFiSensor/WiFiSensor.ino 2>&1)
+  echo $(PWD)/src/WiFiSensor/WiFiSensor.ino
+  build_stdout=$(arduino --verify $(PWD)/src/WiFiSensor/WiFiSensor.ino 2>&1)
 
   # echo output if the build failed
   if [ $? -ne 0 ]; then
