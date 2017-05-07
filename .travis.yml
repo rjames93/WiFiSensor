@@ -20,13 +20,6 @@ install:
   # Set compiler Warnings
   - arduino --pref "compiler.warning_level=debug, custom_CpuFrequency=generic_80, custom_Debug=generic_Disabled, custom_DebugLevel=generic_None____, custom_FlashFreq=generic_40, custom_FlashMode=generic_dio, custom_FlashSize=generic_4M3M, custom_ResetMethod=generic_nodemcu, custom_UploadSpeed=generic_115200" --save-prefs
 
-  #custom_Debug=generic_Disabled
-  #custom_DebugLevel=generic_None____
-  #custom_FlashFreq=generic_40
-  #custom_FlashMode=generic_dio
-  #custom_FlashSize=generic_4M3M
-  #custom_ResetMethod=generic_nodemcu
-  #custom_UploadSpeed=generic_115200
 script:
   - "echo $PWD"
   - "echo $HOME"
