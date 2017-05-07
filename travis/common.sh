@@ -1,6 +1,6 @@
 #!/bin/bash
 
-funnction verify_image()
+function verify_image()
 {
   # track the exit code for this platform
   local exit_code=0
