@@ -11,7 +11,9 @@ function verify_image()
   local sketch="$directory/$filename"
 
   echo "$PWD/src/WiFiSensor/WiFiSensor.ino"
-  build_stdout=$(arduino --verify $sketch 2>&1)
+  echo $sketch
+
+  build_stdout=$(arduino -v --verbose-build --verify $sketch 2>&1)
 
   # echo output if the build failed
   if [ $? -ne 0 ]; then
