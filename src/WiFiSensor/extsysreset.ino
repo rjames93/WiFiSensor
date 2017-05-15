@@ -19,6 +19,20 @@ void extsysreset() {
     digitalWrite(REDLED, HIGH);
   }
 
+  //  Setup mqtt
+  if (setupMQTT() == 1){
+    // Ignore this outcome it hasn't done anything
+  } else {
+    // We have setupMQTT
+    if( !mqttconnect() ){
+      // Haven't been able to connect :|
+      // Handle this exception. Probably reload?
+
+    }
+  }
+
+  // Should now be connected to the MQTT Server
+
   digitalWrite(GREENLED, HIGH);
   // Setup the WebServer
   httpUpdater.setup(&httpServer);
@@ -38,4 +52,3 @@ void extsysreset() {
     memset( msg, 0, sizeof( msg ) );
   }
 }
-

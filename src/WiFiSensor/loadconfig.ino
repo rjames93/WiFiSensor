@@ -120,4 +120,3 @@ int loadconfig() {
   SPIFFS.end();
   return (0);
 }
-
