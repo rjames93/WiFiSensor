@@ -16,7 +16,7 @@ install:
   - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266 --save-prefs
-  - arduino --board esp8266:esp8266:generic --save-prefs
+  - arduino --board "esp8266com:esp8266:generic,CpuFrequency=80,FlashFreq=40,FlashMode=dio,UploadSpeed=115200,FlashSize=512K64" --save-prefs
   # Set compiler Warnings
   - arduino --pref "compiler.warning_level=debug, custom_CpuFrequency=generic_80, custom_Debug=generic_Disabled, custom_DebugLevel=generic_None____, custom_FlashFreq=generic_40, custom_FlashMode=generic_dio, custom_FlashSize=generic_4M3M, custom_ResetMethod=generic_nodemcu, custom_UploadSpeed=generic_115200, build.verbose=true" --save-prefs
 script:
