@@ -140,6 +140,10 @@ void loop() {
     if (mqttmode == true) {
       if ( timer <= 100 ) {
         // We need to report to the MQTT Server
+        if(!mqttconnect()){
+          Serial.print("Unable to connect to MQTT Server");
+        }
+        // Connected to MQTT Server
         String topicname("sensors/");
         topicname += String(sensorname);
         topicname += String("/");
