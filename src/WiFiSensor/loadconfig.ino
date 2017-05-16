@@ -35,7 +35,7 @@ void createdefaultconfig() {
   mqtt["username"] = "";
   mqtt["password"] = "";
   mqtt["temperaturetopic"] = "temp";
-  mqtt["humiditytopic"] = "humidity"
+  mqtt["humiditytopic"] = "humidity";
   features["mqtt-settings"] = mqtt;
   root["features"] = features;
 
