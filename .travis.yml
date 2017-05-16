@@ -16,24 +16,30 @@ install:
   - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266 --save-prefs
-  - arduino --board esp8266:esp8266:generic --save-prefs
-  # Set compiler Warnings
-  - arduino --pref "compiler.warning_level=debug, custom_CpuFrequency=generic_80, custom_Debug=generic_Disabled, custom_DebugLevel=generic_None____, custom_FlashFreq=generic_40, custom_FlashMode=generic_dio, custom_FlashSize=generic_4M3M, custom_ResetMethod=generic_nodemcu, custom_UploadSpeed=generic_115200, build.verbose=true" --save-prefs
+  - arduino --board esp8266:esp8266:generic:CpuFrequency=80,FlashFreq=40,FlashMode=dio,UploadSpeed=921600,FlashSize=4M3M,ResetMethod=ck --save-prefs
+  - arduino --pref "compiler.warning_level=all" --save-prefs
+  - arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build --save-prefs
+  - mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
 script:
   - "echo $PWD"
   - "echo $HOME"
   - "ls $PWD"
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
-  - arduino --verbose-build $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino
-#  - build_examples
-#  - "cat $PWD/examples/AutoConnect/AutoConnect.ino"
-#  - arduino -v --verbose-build --verify $PWD/examples/AutoConnect/AutoConnect.ino
-#  - arduino --verify --board arduino:avr:uno $PWD/examples/IncomingCall/IncomingCall.ino
-#  - arduino --verify --board arduino:avr:uno $PWD/examples/AdafruitIO_GPS/AdafruitIO_GPS.ino
+  - arduino --verbose --verify ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino
 after_success:
   #
 notifications:
   email:
     on_success: change
     on_failure: change
+deploy:
+  provider: releases
+  skip_cleanup: true
+  release:
+  api_key:
+    secure: DNfZKjtM7DwA7ZEV5Hjs/J3ni7ir4emnBwntK+hEBSeK0ymHnch3uo06rtiqfc1qJdh7UuJkoJY1jY4E0ddT2md/1MmtW+vj5sNFb5+qZm2pac3iRqG+3I3hwvuKmfi+SLhXbnU5OYzCWqPFqhmfm9HhldJtclzbhV0FHqSoB6XvzMBPEcKtloWpo7pmvv6uhCiFynRn5yd51HFndpNs2pY9Mauv1Kxr1mvedumBDzB6RbM+Mx1/yTHTWafoL8LrqPeupRLFblRl3YOhNpIFvt6TqgxJ9mQgM+BSVaQQzdxZDEnl+NGc0fHn6M2ZuVcWUe8bATpI/FL9vyAwWJBi5/Z7hJ19GuHOLdV5hloiEzBlKdd5R7wFPTg88ELqXd27W79wchjj8e2zKqahmgjEZTiOtnXkHNnLBy7FOzyDV0rl0/Tze3NbARW6TdgHelypgwZm9nL69uFWR+NDHY4ovbuznTKs9ojCmLaujaYKxb6jlqW+wFxbR1opb21PrGSKhNipi1lJyyX65fj8a2PO2GPEyxmZ3J4VqM8f1vUnLwMWXqMzE7LhknuuG/dOiA1oKcyl1W08+0Qzx7cxNr38H0OsPGdKNWHXGaedAM3MiDW0G7PaK9iffHEdUcqUzAVcBh93dx3ieBZjRE/xjLCwt93n6m/sME6ait39YYo+6bo=
+  file: '/home/travis/build/rjames93/WiFiSensor/src/WiFiSensor/build/WiFiSensor.ino.bin'
+  on:
+    all_branches: true
+    repo: rjames93/WiFiSensor
