@@ -4,7 +4,7 @@ int setupMQTT(){
     return (1);
   }
 
-  client.setServer(mqttserver, mqttport);
+  client.setServer(mqttserver.c_str(), mqttport);
   /*
   mqttserver = root["mqtt-settings"]["mqtt_server"].asString();
   mqttport = root["mqtt-settings"]["mqtt_port"];
