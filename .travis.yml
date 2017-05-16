@@ -26,6 +26,7 @@ script:
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
   - arduino --verbose-build $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino
+    "echo this probably failed"
 #  - build_examples
 #  - "cat $PWD/examples/AutoConnect/AutoConnect.ino"
 #  - arduino -v --verbose-build --verify $PWD/examples/AutoConnect/AutoConnect.ino
