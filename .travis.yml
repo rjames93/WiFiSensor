@@ -17,7 +17,6 @@ install:
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266 --save-prefs
   - arduino --board esp8266:esp8266:generic:CpuFrequency=80,FlashFreq=40,FlashMode=dio,UploadSpeed=921600,FlashSize=4M3M,ResetMethod=ck --save-prefs
-  - arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build --save-prefs
    - mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
 script:
   - "echo $PWD"
