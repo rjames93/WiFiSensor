@@ -1,4 +1,12 @@
+sudo: required
 language: c
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - cmake
 before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16"
   - sleep 3
@@ -7,6 +15,10 @@ before_install:
   - tar xf arduino-1.8.2-linux64.tar.xz
   - sudo mv arduino-1.8.2 /usr/local/share/arduino
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
+  # Code Coverage thingamajiggy
+
+
+
 install:
   # Add the esp8266 to the boardmanager <- basically download the appropriate compilers
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
@@ -16,23 +28,21 @@ install:
   - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266 --save-prefs
-  - arduino --board esp8266:esp8266:generic --save-prefs
-  # Set compiler Warnings
-  - arduino --pref "compiler.warning_level=debug, custom_CpuFrequency=generic_80, custom_Debug=generic_Disabled, custom_DebugLevel=generic_None____, custom_FlashFreq=generic_40, custom_FlashMode=generic_dio, custom_FlashSize=generic_4M3M, custom_ResetMethod=generic_nodemcu, custom_UploadSpeed=generic_115200, build.verbose=true" --save-prefs
+  - arduino --board esp8266:esp8266:generic:CpuFrequency=80,FlashFreq=40,FlashMode=dio,UploadSpeed=921600,FlashSize=4M3M,ResetMethod=ck --save-prefs
+  # Potentially extracted from working gui
+  # esp8266:esp8266:generic:CpuFrequency=80,FlashFreq=40,FlashMode=dio,UploadSpeed=921600,FlashSize=4M3M,ResetMethod=ck
+
+
+  - arduino --pref "compiler.warning_level=all" --save-prefs
+  - arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build --save-prefs
+  - mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
 script:
-  - "echo $PWD"
-  - "echo $HOME"
-  - "ls $PWD"
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
-  - arduino --verbose-build $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino
-#  - build_examples
-#  - "cat $PWD/examples/AutoConnect/AutoConnect.ino"
-#  - arduino -v --verbose-build --verify $PWD/examples/AutoConnect/AutoConnect.ino
-#  - arduino --verify --board arduino:avr:uno $PWD/examples/IncomingCall/IncomingCall.ino
-#  - arduino --verify --board arduino:avr:uno $PWD/examples/AdafruitIO_GPS/AdafruitIO_GPS.ino
+  - arduino --verbose --verify ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino
+  - "echo Build should be Finished"
 after_success:
-  #
+  - bash <(curl -s https://codecov.io/bash)
 notifications:
   email:
     on_success: change
