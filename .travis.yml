@@ -21,6 +21,7 @@ install:
 script:
   - "echo $PWD"
   - "echo $HOME"
+  - "echo $TRAVIS_BUILD_DIR"
   - "ls $PWD"
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
