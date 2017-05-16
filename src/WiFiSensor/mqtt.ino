@@ -11,6 +11,8 @@ int setupMQTT(){
   mqttclientname = root["mqtt-settings"]["client_name"].asString();
   mqttusername = root["mqtt-settings"]["username"].asString();
   mqttpassword = root["mqtt-settings"]["password"].asString();
+  mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
+  mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
   */
   return(0);
 }
