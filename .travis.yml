@@ -1,4 +1,12 @@
+sudo: required
 language: c
+addons:
+  apt:
+    packages:
+      - libcurl4-openssl-dev
+      - libelf-dev
+      - libdw-dev
+      - cmake
 before_install:
   - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16"
   - sleep 3
@@ -7,6 +15,10 @@ before_install:
   - tar xf arduino-1.8.2-linux64.tar.xz
   - sudo mv arduino-1.8.2 /usr/local/share/arduino
   - sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
+  # Code Coverage thingamajiggy
+
+
+
 install:
   # Add the esp8266 to the boardmanager <- basically download the appropriate compilers
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
@@ -25,7 +37,7 @@ script:
   - "ls $PWD"
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
-  - arduino --verbose-build $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino
+  - arduino --verbose-build $(TRAVIS_BUILD_DIR)/src/WiFiSensor/WiFiSensor.ino
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
