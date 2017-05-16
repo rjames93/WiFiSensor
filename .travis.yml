@@ -16,9 +16,8 @@ install:
   - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266 --save-prefs
-  - arduino --board "esp8266:esp8266:generic" --save-prefs
-  # Set compiler Warnings
-  - arduino --pref "compiler.warning_level=debug,CpuFrequency=generic_80,FlashFreq=40,FlashMode=dio,UploadSpeed=115200,FlashSize=generic_4M3M,UploadSpeed=115200, build.verbose=true" --save-prefs
+  - arduino --board esp8266:esp8266:generic --save-prefs
+  - arduino --pref "compiler.warning_level=all" --save-prefs
 script:
   - "echo $PWD"
   - "echo $HOME"
@@ -26,14 +25,8 @@ script:
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
   - arduino --verbose-build $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino
-  - "echo this probably failed"
-#  - build_examples
-#  - "cat $PWD/examples/AutoConnect/AutoConnect.ino"
-#  - arduino -v --verbose-build --verify $PWD/examples/AutoConnect/AutoConnect.ino
-#  - arduino --verify --board arduino:avr:uno $PWD/examples/IncomingCall/IncomingCall.ino
-#  - arduino --verify --board arduino:avr:uno $PWD/examples/AdafruitIO_GPS/AdafruitIO_GPS.ino
 after_success:
-  #
+  - bash <(curl -s https://codecov.io/bash)
 notifications:
   email:
     on_success: change
