@@ -30,7 +30,8 @@ install:
   - arduino --install-boards esp8266:esp8266 --save-prefs
   - arduino --board esp8266:esp8266:generic --save-prefs
   - arduino --pref "compiler.warning_level=all" --save-prefs
-  - arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
+  - arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build --save-prefs
+  mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
 script:
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
