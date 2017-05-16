@@ -38,7 +38,7 @@ script:
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
   - "echo ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino"
-  - arduino --verbose-build $(TRAVIS_BUILD_DIR)/src/WiFiSensor/WiFiSensor.ino
+  - arduino --verbose-build ${TRAVIS_BUILD_DI}/src/WiFiSensor/WiFiSensor.ino
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
