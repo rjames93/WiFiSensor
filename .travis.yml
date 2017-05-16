@@ -36,10 +36,9 @@ notifications:
 deploy:
   provider: releases
   skip_cleanup: true
-  release:
   api_key:
     secure: DNfZKjtM7DwA7ZEV5Hjs/J3ni7ir4emnBwntK+hEBSeK0ymHnch3uo06rtiqfc1qJdh7UuJkoJY1jY4E0ddT2md/1MmtW+vj5sNFb5+qZm2pac3iRqG+3I3hwvuKmfi+SLhXbnU5OYzCWqPFqhmfm9HhldJtclzbhV0FHqSoB6XvzMBPEcKtloWpo7pmvv6uhCiFynRn5yd51HFndpNs2pY9Mauv1Kxr1mvedumBDzB6RbM+Mx1/yTHTWafoL8LrqPeupRLFblRl3YOhNpIFvt6TqgxJ9mQgM+BSVaQQzdxZDEnl+NGc0fHn6M2ZuVcWUe8bATpI/FL9vyAwWJBi5/Z7hJ19GuHOLdV5hloiEzBlKdd5R7wFPTg88ELqXd27W79wchjj8e2zKqahmgjEZTiOtnXkHNnLBy7FOzyDV0rl0/Tze3NbARW6TdgHelypgwZm9nL69uFWR+NDHY4ovbuznTKs9ojCmLaujaYKxb6jlqW+wFxbR1opb21PrGSKhNipi1lJyyX65fj8a2PO2GPEyxmZ3J4VqM8f1vUnLwMWXqMzE7LhknuuG/dOiA1oKcyl1W08+0Qzx7cxNr38H0OsPGdKNWHXGaedAM3MiDW0G7PaK9iffHEdUcqUzAVcBh93dx3ieBZjRE/xjLCwt93n6m/sME6ait39YYo+6bo=
   file: '/home/travis/build/rjames93/WiFiSensor/src/WiFiSensor/build/WiFiSensor.ino.bin'
   on:
-    all_branches: true
+    tags: true
     repo: rjames93/WiFiSensor
