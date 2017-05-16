@@ -31,14 +31,10 @@ install:
   - arduino --board esp8266:esp8266:generic --save-prefs
   - arduino --pref "compiler.warning_level=all" --save-prefs
 script:
-  - "echo $PWD"
-  - "echo $HOME"
-  - "echo ${TRAVIS_BUILD_DIR}"
-  - "ls $PWD"
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
-  - "echo ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino"
-  - arduino --verbose-build ${TRAVIS_BUILD_DI}/src/WiFiSensor/WiFiSensor.ino
+  - arduino --verbose-build ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino
+  - "echo Build should be Finished"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
