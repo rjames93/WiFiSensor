@@ -33,11 +33,11 @@ install:
 script:
   - "echo $PWD"
   - "echo $HOME"
-  - "echo $TRAVIS_BUILD_DIR"
+  - "echo ${TRAVIS_BUILD_DIR}"
   - "ls $PWD"
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
-  - "echo $TRAVIS_BUILD_DIR/src/WiFiSensor/WiFiSensor.ino"
+  - "echo ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino"
   - arduino --verbose-build $(TRAVIS_BUILD_DIR)/src/WiFiSensor/WiFiSensor.ino
 after_success:
   - bash <(curl -s https://codecov.io/bash)
