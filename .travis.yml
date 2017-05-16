@@ -28,10 +28,10 @@ install:
   - arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
   # Install the ESP board files
   - arduino --install-boards esp8266:esp8266 --save-prefs
-  - arduino --board esp8266:esp8266:generic --save-prefs
+  - arduino --board esp8266:esp8266:generic:CpuFrequency=80,FlashFreq=40,FlashMode=DIO,UploadSpeed=115200,FlashSize=4M1M,ResetMethod=none --save-prefs
   - arduino --pref "compiler.warning_level=all" --save-prefs
   - arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build --save-prefs
-  mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
+  - mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
 script:
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
