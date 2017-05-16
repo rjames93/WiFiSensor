@@ -152,7 +152,7 @@ void loop() {
         snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
         client.publish( (topicname + mqtttemperaturetopic).c_str(), msg);
         snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-        client.publish((topicname + mqtthumiditytopic)).c_str(), msg);
+        client.publish((topicname + mqtthumiditytopic).c_str(), msg);
       }
     }
     //delay(250);
