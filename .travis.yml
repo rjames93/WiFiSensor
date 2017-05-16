@@ -34,7 +34,7 @@ install:
 script:
   #- source $TRAVIS_BUILD_DIR/travis/common.sh
   - "echo Starting the Build"
-  - arduino --verbose-build --verify ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino
+  - arduino --verbose --verify ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino
   - "echo Build should be Finished"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
