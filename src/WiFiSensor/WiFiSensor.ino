@@ -30,6 +30,8 @@ int mqttport;
 String mqttclientname;
 String mqttusername;
 String mqttpassword;
+String mqtthumiditytopic;
+String mqtttemperaturetopic;
 bool deepsleepmode = false;
 bool mqttmode = false;
 bool serialmode = false;
@@ -140,13 +142,17 @@ void loop() {
     if (mqttmode == true) {
       if ( timer <= 100 ) {
         // We need to report to the MQTT Server
+        if(!mqttconnect()){
+          Serial.print("Unable to connect to MQTT Server");
+        }
+        // Connected to MQTT Server
         String topicname("sensors/");
         topicname += String(sensorname);
         topicname += String("/");
         snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-        client.publish( (topicname + String("temp")).c_str(), msg);
+        client.publish( (topicname + mqtttemperaturetopic).c_str(), msg);
         snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-        client.publish((topicname + String("temp")).c_str(), msg);
+        client.publish((topicname + mqtthumiditytopic).c_str(), msg);
       }
     }
     //delay(250);

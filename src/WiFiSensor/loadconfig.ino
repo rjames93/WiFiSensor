@@ -34,6 +34,8 @@ void createdefaultconfig() {
   mqtt["client_name"] = ssidname;
   mqtt["username"] = "";
   mqtt["password"] = "";
+  mqtt["temperaturetopic"] = "temp";
+  mqtt["humiditytopic"] = "humidity";
   features["mqtt-settings"] = mqtt;
   root["features"] = features;
 
@@ -108,6 +110,8 @@ int loadconfig() {
     mqttclientname = root["mqtt-settings"]["client_name"].asString();
     mqttusername = root["mqtt-settings"]["username"].asString();
     mqttpassword = root["mqtt-settings"]["password"].asString();
+    mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
+    mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
   }
 
   lastmodification = root["last_modification"];
@@ -120,4 +124,3 @@ int loadconfig() {
   SPIFFS.end();
   return (0);
 }
-
