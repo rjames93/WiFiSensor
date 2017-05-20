@@ -39,6 +39,9 @@ bool configloaded = false;
 long lastmodification = 0;
 struct measurements lastmeasurement;
 
+/* Software Version Management */
+String firmwareversion = "0.0.2";
+
 /* PIN definitions */
 const int GREENLED = 4;
 const int REDLED = 5;

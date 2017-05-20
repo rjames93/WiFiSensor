@@ -123,6 +123,8 @@ void landingPage() {
   html += String("</title></head><body><h1>");
   html += sensorname;
   html += String(" Status</h1><br>");
+  html += String("<p>Firmware Version: ");
+  html += firmwareversion;
   html += String("<h2>Last Measurement</h2>");
   html += String("<p>Temperature (°C): ");
   html += String(lastmeasurement.temperature);
