@@ -41,4 +41,4 @@ deploy:
   file: '/home/travis/build/rjames93/WiFiSensor/src/WiFiSensor/build/WiFiSensor.ino.bin'
   on:
     tags: true
-    repo: rjames93/WiFiSensor
+    repo: brickmen/WiFiSensor
