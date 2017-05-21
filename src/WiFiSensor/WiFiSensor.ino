@@ -128,9 +128,9 @@ void loop() {
   // put your main code here, to run repeatedly:
   httpServer.handleClient();
   long timer = (millis() % 30000); // This will reset every 30000 milliseconds a.k.a every 30 seconds
-  if ( timer <= 100 ) {
+  if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
     dhtmeasure();
-    if (serialmode == true) {
+    if (serialmode == true) { // Print to Serial
       Serial.print("Temp: ");
       Serial.print(lastmeasurement.temperature);
       Serial.print("°C, Relative Humidity: ");
@@ -139,8 +139,10 @@ void loop() {
       //Serial.println(millis());
     }
 
-    if (mqttmode == true) {
+    if (mqttmode == true) { // Send data to MQTT Broker
+      Serial.println("Handling MQTT")
       if ( timer <= 100 ) {
+        Serial.println("Gathering Data")
         // We need to report to the MQTT Server
         if(!mqttconnect()){
           Serial.print("Unable to connect to MQTT Server");
@@ -155,6 +157,5 @@ void loop() {
         client.publish((topicname + mqtthumiditytopic).c_str(), msg);
       }
     }
-    //delay(250);
   }
 }
