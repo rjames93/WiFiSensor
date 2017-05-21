@@ -142,7 +142,7 @@ void loop() {
     if (mqttmode == true) { // Send data to MQTT Broker
       Serial.println("Handling MQTT");
       if ( timer <= 100 ) {
-        Serial.println("Gathering Data")
+        Serial.println("Gathering Data");
         // We need to report to the MQTT Server
         if(!mqttconnect()){
           Serial.print("Unable to connect to MQTT Server");
