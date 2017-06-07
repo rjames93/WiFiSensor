@@ -55,8 +55,8 @@ int loadconfig() {
   Serial.println("");
   Serial.println("Loading Config");
   SPIFFS.begin();
-  // By this point the configuration file should exist
   File f;
+  // By this point the configuration file should exist
   if (!SPIFFS.exists("/configuration.cfg")) {
     Serial.println("Opening Default Config");
     f = SPIFFS.open("/default.cfg", "r");
@@ -118,7 +118,7 @@ int loadconfig() {
   sensorname = root["sensorname"].asString();
 
   softapssid = root["softap"]["ssid"].asString();
-
+  // Set configloaded flag
   configloaded = true;
   Serial.println("Config Loaded");
   SPIFFS.end();
