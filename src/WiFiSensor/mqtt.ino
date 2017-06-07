@@ -28,9 +28,12 @@ int mqttconnect(){
     return(0);
   } else {
     Serial.println("Unable To Connect, Details: ");
-    Serial.println("  mqttclientname: " + mqttclientname);
-    Serial.println("  mqttusername: " + mqttusername);
-    Serial.println("  mqttpassword: " + mqttpassword);
+    Serial.println("  mqttclientname: ");
+    Serial.println(mqttclientname);
+    Serial.println("  mqttusername: ");
+    Serial.println(mqttusername);
+    Serial.println("  mqttpassword: ");
+    Serial.println(mqttpassword);
     Serial.println(" ");
     return(2);
   }
@@ -42,9 +45,11 @@ int mqttpublish(String topic, const char* msg ){
       return 0;
   }else{
       Serial.println( "Failed MQTT Update, Details:");
-      Serial.println("  topic: " + topic);
-      Serial.println("  msg: " + String(msg) );
-      Serial.println("");
+      Serial.println("  topic: ");
+      Serial.println(topic);
+      Serial.println("  msg: ");
+      Serial.println(msg );
+      Serial.println(" ");
       return 1;
   }
 }
