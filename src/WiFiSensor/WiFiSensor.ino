@@ -155,22 +155,29 @@ void loop() {
         topicname += String(sensorname);
         topicname += String("/");
         snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-		String seialdetails = topicname + mqtttemperaturetopic + " Value: " + msg;
         if(client.publish( (topicname + mqtttemperaturetopic).c_str(), msg)){
 			Serial.println( "Successful MQTT Update 1");
-			Serial.println(serialdetails)
 		}else{
 			Serial.println( "Failed MQTT Update 1");
-			Serial.println(serialdetails)
+			Serial.println("topicname");
+			Serial.println(topicname);
+			Serial.println("mqtttemperaturetopic");
+			Serial.println(mqtttemperaturetopic);
+			Serial.println("msg");
+			Serial.println(msg);
 		}		
+		
         snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-		seialdetails = topicname + mqtthumiditytopic + " Value: " + msg;
         if(client.publish((topicname + mqtthumiditytopic).c_str(), msg)){
 			Serial.println( "Successful MQTT Update 2");
-			Serial.println(serialdetails)
 		}else{
 			Serial.println( "Failed MQTT Update 2");
-			Serial.println(serialdetails)
+			Serial.println("topicname");
+			Serial.println(topicname);
+			Serial.println("mqtthumiditytopic");
+			Serial.println(mqtthumiditytopic);
+			Serial.println("msg");
+			Serial.println(msg);
 		}
       }
     }
