@@ -157,10 +157,14 @@ void loop() {
         snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
         if(client.publish( (topicname + mqtttemperaturetopic).c_str(), msg)){
 			Serial.println("Successful Published Data: " + topicname + mqtttemperaturetopic + " Value: " + msg );
+		}else{
+			Serial.println("Failed Published Data: " + topicname + mqtttemperaturetopic + " Value: " + msg );
 		}		
         snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
         if(client.publish((topicname + mqtthumiditytopic).c_str(), msg)){
 			Serial.println("Successful Published Data 2: " + topicname + mqtthumiditytopic + " Value: " + msg );
+		}else{
+			Serial.println("Failed Published Data 2: " + topicname + mqtthumiditytopic + " Value: " + msg );
 		}
       }
     }
