@@ -1,0 +1,42 @@
+language: c
+before_install:
+- "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_1.pid --make-pidfile
+  --background --exec /usr/bin/Xvfb -- :1 -ac -screen 0 1280x1024x16"
+- sleep 3
+- export DISPLAY=:1.0
+- wget http://downloads.arduino.cc/arduino-1.8.2-linux64.tar.xz
+- tar xf arduino-1.8.2-linux64.tar.xz
+- sudo mv arduino-1.8.2 /usr/local/share/arduino
+- sudo ln -s /usr/local/share/arduino/arduino /usr/local/bin/arduino
+install:
+- arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json"
+  --save-prefs
+- git clone https://github.com/bblanchon/ArduinoJson /usr/local/share/arduino/libraries/ArduinoJson
+- arduino --install-library "DHT sensor library,Adafruit Unified Sensor,PubSubClient"
+- arduino --install-boards esp8266:esp8266 --save-prefs
+- arduino --board esp8266:esp8266:generic:CpuFrequency=80,FlashFreq=40,FlashMode=dio,UploadSpeed=921600,FlashSize=4M3M,ResetMethod=ck
+  --save-prefs
+- arduino --pref "compiler.warning_level=all" --save-prefs
+- arduino --pref build.path=${TRAVIS_BUILD_DIR}/src/WiFiSensor/build --save-prefs
+- mkdir -p ${TRAVIS_BUILD_DIR}/src/WiFiSensor/build
+script:
+- echo $PWD
+- echo $HOME
+- ls $PWD
+- echo Starting the Build
+- arduino --verbose --verify ${TRAVIS_BUILD_DIR}/src/WiFiSensor/WiFiSensor.ino
+after_success: 
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+deploy:
+  provider: releases
+  api_key:
+    secure: Qpj81FPNGCsTz3Irwt0ztuyEinWC6k89/LN7C2LfkZXZTxYUONJojkvEQqZH7f2paf4RdGl+PXSVbWRBVH7Ji/hBCtttiFh+w0t8lGMfyCB3LggKNbYrF8dGH7lfJbrCZBsFPo/GEXki1kuhQzKUB8qOc+q52hWCfE+3zMddsp1Z5aBLgQWsbWGa1zcKYV9TvrR8IwQTqedvoW/kjFwW79PkUiSkvdi5ZNAouNy9ROpB+rqg+PRXwGhV2EGOal0r/u889gl6kMGDpHP92hB3Y0kQALVt4w0nKuzlo4EYqkTZvcTdBIGijCSU0wxtL51rA6Pr3QEPzRiJiGvKmLWq40CDPihEyfGbtkBDDyHJr/Qu6wP/FjRi/vcYM/tfHyhPYJJYALrIRN5esXJrpyunlyg25+zGk3jB638FYjJTuOjXPQHEhT+J2FMWeT3lr6lXE6KMTroqO53uz4/r6aOi4E5mpF498xDWG4EdpAbAa+SiuBVRy59+EvyCg//9sx6MQghHOSwrjcC7tlCMUI8QHgS2cZU2os3QCzueLPyjQUTDJ/yT69vIA/Yi1kgeV4rRsxhFKcvddnVa/dhEF3yw5clngTRoCA6n3isTwxQb2nHwUaPhKGHDsiyblKkkaQ6+43+DfOMuAU2Qn65syeTeiFCKidBRhqutmUWfI+nKgyE=
+  file: '/home/travis/build/brickmen/WiFiSensor/src/WiFiSensor/build/WiFiSensor.ino.bin'
+  skip_cleanup: true
+  on:
+    repo: brickmen/WiFiSensor
+    tags: false
+    all_branches: true
