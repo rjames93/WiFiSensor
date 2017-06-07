@@ -151,10 +151,6 @@ void loop() {
           Serial.print("Unable to connect to MQTT Server");
         }else{
 			// Connect to MQTT Server
-			//Code in brought in from mqttconnect()
-			mqttclientname = root["mqtt-settings"]["client_name"].asString();
-			mqttusername = root["mqtt-settings"]["username"].asString();
-			mqttpassword = root["mqtt-settings"]["password"].asString();
 			client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
 			//Following is original
 			String topicname("sensors/");

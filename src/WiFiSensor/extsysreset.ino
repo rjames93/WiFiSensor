@@ -24,9 +24,10 @@ void extsysreset() {
     // Ignore this outcome it hasn't done anything
   } else {
     // We have setupMQTT
-    if( !mqttconnect() ){
+    if( mqttconnect() != 0 ){
       // Haven't been able to connect :|
       // Handle this exception. Probably reload?
+      Serial.println("Unable to connect to MQTT after reset");
 
     }
   }
