@@ -40,7 +40,7 @@ long lastmodification = 0;
 struct measurements lastmeasurement;
 
 /* Software Version Management */
-String firmwareversion = "0.0.2";
+String firmwareversion = "0.0.3";
 
 /* PIN definitions */
 const int GREENLED = 4;
@@ -155,9 +155,13 @@ void loop() {
         topicname += String(sensorname);
         topicname += String("/");
         snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-        client.publish( (topicname + mqtttemperaturetopic).c_str(), msg);
+        if(client.publish( (topicname + mqtttemperaturetopic).c_str(), msg)){
+			Serial.println("Successful Publish Data: " + (topicname + mqtttemperaturetopic).c_str() );
+		}		
         snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-        client.publish((topicname + mqtthumiditytopic).c_str(), msg);
+        if(client.publish((topicname + mqtthumiditytopic).c_str(), msg)){
+			Serial.println("Successful Published Data 2: " + (topicname + mqtthumiditytopic).c_str() );
+		}
       }
     }
   }
