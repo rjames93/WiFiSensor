@@ -149,38 +149,47 @@ void loop() {
         // We need to report to the MQTT Server
         if(!mqttconnect()){
           Serial.print("Unable to connect to MQTT Server");
-        }
-        // Connected to MQTT Server
-        String topicname("sensors/");
-        topicname += String(sensorname);
-        topicname += String("/");
-		mqtttemperaturetopic = "temp";
-		mqtthumiditytopic = "humidity";
-        snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-        if(client.publish( (topicname + mqtttemperaturetopic).c_str(), msg)){
-			Serial.println( "Successful MQTT Update 1");
-		}else{
-			Serial.println( "Failed MQTT Update 1");
-			Serial.println("topicname");
-			Serial.println(topicname);
-			Serial.println("mqtttemperaturetopic");
-			Serial.println(mqtttemperaturetopic);
-			Serial.println("msg");
-			Serial.println(msg);
-		}		
-		
-        snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-        if(client.publish((topicname + mqtthumiditytopic).c_str(), msg)){
-			Serial.println( "Successful MQTT Update 2");
-		}else{
-			Serial.println( "Failed MQTT Update 2");
-			Serial.println("topicname");
-			Serial.println(topicname);
-			Serial.println("mqtthumiditytopic");
-			Serial.println(mqtthumiditytopic);
-			Serial.println("msg");
-			Serial.println(msg);
+        }else{
+			// Connected to MQTT Server
+			client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
+			String topicname("sensors/");
+			topicname += String(sensorname);
+			topicname += String("/");
+			mqtttemperaturetopic = "temp";
+			mqtthumiditytopic = "humidity";
+			snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
+			if(client.publish( (topicname + mqtttemperaturetopic).c_str(), msg)){
+				Serial.println( "Successful MQTT Update 1");
+			}else{
+				Serial.println( "Failed MQTT Update 1");
+				Serial.println("mqttclientname");
+				Serial.println(mqttclientname);
+				Serial.println("mqttusername");
+				Serial.println(mqttusername);
+				Serial.println("mqttpassword");
+				Serial.println(mqttpassword);
+				Serial.println("topicname");
+				Serial.println(topicname);
+				Serial.println("mqtttemperaturetopic");
+				Serial.println(mqtttemperaturetopic);
+				Serial.println("msg");
+				Serial.println(msg);
+			}		
+			
+			snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
+			if(client.publish((topicname + mqtthumiditytopic).c_str(), msg)){
+				Serial.println( "Successful MQTT Update 2");
+			}else{
+				Serial.println( "Failed MQTT Update 2");
+				Serial.println("topicname");
+				Serial.println(topicname);
+				Serial.println("mqtthumiditytopic");
+				Serial.println(mqtthumiditytopic);
+				Serial.println("msg");
+				Serial.println(msg);
+			}
 		}
+        
       }
     }
   }
