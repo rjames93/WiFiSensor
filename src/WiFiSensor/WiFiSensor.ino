@@ -154,6 +154,8 @@ void loop() {
         String topicname("sensors/");
         topicname += String(sensorname);
         topicname += String("/");
+		mqtttemperaturetopic = "temp";
+		mqtthumiditytopic = "humidity";
         snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
         if(client.publish( (topicname + mqtttemperaturetopic).c_str(), msg)){
 			Serial.println( "Successful MQTT Update 1");
