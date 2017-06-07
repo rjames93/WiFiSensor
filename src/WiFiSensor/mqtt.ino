@@ -40,7 +40,7 @@ int mqttpublish(String topic, const char* msg ){
       return 0;
   }else{
       Serial.println( "Failed MQTT Update");
-      Serial.print("topic: " + topice + " msg: " + msg );
+      Serial.print("topic: " + topic + " msg: " + msg );
       Serial.println("");
       return 1;
   }
