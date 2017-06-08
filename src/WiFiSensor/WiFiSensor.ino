@@ -40,7 +40,7 @@ long lastmodification = 0;
 struct measurements lastmeasurement;
 
 /* Software Version Management */
-String firmwareversion = "0.0.3";
+String firmwareversion = "0.0.4";
 
 /* PIN definitions */
 const int GREENLED = 4;

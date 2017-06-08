@@ -104,7 +104,8 @@ int loadconfig() {
   mqttmode = root["features"]["mqtt"];
   serialmode = root["features"]["serial"];
 
-  if (mqttmode == true) {
+  //if (mqttmode == true) {
+  //Overridden for now to ensure mqtt is read
     mqttserver = root["mqtt-settings"]["mqtt_server"].asString();
     mqttport = root["mqtt-settings"]["mqtt_port"];
     mqttclientname = root["mqtt-settings"]["client_name"].asString();
@@ -112,7 +113,7 @@ int loadconfig() {
     mqttpassword = root["mqtt-settings"]["password"].asString();
     mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
     mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
-  }
+  //}
 
   lastmodification = root["last_modification"];
   sensorname = root["sensorname"].asString();
