@@ -7,7 +7,7 @@ void createdefaultconfig() {
     Serial.println("Unable to open the file: /default.cfg");
     return;
   }
-  StaticJsonBuffer<768> jsonBuffer;
+  StaticJsonBuffer<896> jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
   
   StaticJsonBuffer<128> wifibuffer;
@@ -30,7 +30,7 @@ void createdefaultconfig() {
   features["serial"] = true;
   root["features"] = features;
   
-  StaticJsonBuffer<128> mqttbuffer;
+  StaticJsonBuffer<256> mqttbuffer;
   JsonObject &mqtt = mqttbuffer.createObject();
   mqtt["mqtt_server"] = "127.0.0.1";
   mqtt["mqtt_port"] = 1883;
