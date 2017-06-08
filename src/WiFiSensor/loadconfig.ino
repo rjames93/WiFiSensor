@@ -122,8 +122,8 @@ int loadconfig() {
     mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
     mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
   //}
-  tempoffset = root["calibration"]["temperature-offset"].asFloat();
-  humidityoffset = root["calibration"]["humidity-offset"].asFloat();
+  tempoffset = root["calibration"]["temperature-offset"].as<float>();
+  humidityoffset = root["calibration"]["humidity-offset"].as<float>();
 
   lastmodification = root["last_modification"];
   sensorname = root["sensorname"].asString();
