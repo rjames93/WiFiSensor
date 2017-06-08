@@ -7,8 +7,9 @@ void createdefaultconfig() {
     Serial.println("Unable to open the file: /default.cfg");
     return;
   }
-  StaticJsonBuffer<512> jsonBuffer;
+  StaticJsonBuffer<768> jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
+  
   StaticJsonBuffer<128> wifibuffer;
   JsonObject &wifista = wifibuffer.createObject();
   wifista["ssid"] = "default";
@@ -27,6 +28,8 @@ void createdefaultconfig() {
   features["deepsleep"] = false;
   features["mqtt"] = false;
   features["serial"] = true;
+  root["features"] = features;
+  
   StaticJsonBuffer<128> mqttbuffer;
   JsonObject &mqtt = mqttbuffer.createObject();
   mqtt["mqtt_server"] = "127.0.0.1";
@@ -34,10 +37,15 @@ void createdefaultconfig() {
   mqtt["client_name"] = ssidname;
   mqtt["username"] = "";
   mqtt["password"] = "";
-  mqtt["temperaturetopic"] = "temp";
+  mqtt["temperaturetopic"] = "temperature";
   mqtt["humiditytopic"] = "humidity";
-  features["mqtt-settings"] = mqtt;
-  root["features"] = features;
+  root["mqtt-settings"] = mqtt;
+  
+  StaticJsonBuffer<128> calbuffer;
+  JsonObject &calib = calbuffer.createObject();
+  calib["temperature-offset"] = "0";
+  calib["humidity-offset"] = "0";
+  root["calibration"] = calib;
 
   root["last_modification"] = 0; // Default values. Basically we just check to see if this value is not 0
   root["sensorname"] = "SmartSensor";
@@ -114,6 +122,8 @@ int loadconfig() {
     mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
     mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
   //}
+  tempoffset = root["calibration"]["temperature-offset"].asFloat();
+  humidityoffset = root["calibration"]["humidity-offset"].asFloat();
 
   lastmodification = root["last_modification"];
   sensorname = root["sensorname"].asString();

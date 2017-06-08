@@ -7,17 +7,18 @@ void extsysreset() {
   delay(1000);
   // Try connecting to the WiFi using the config file
   if ( !trySTAWiFi() ) {
-    // STA Failed
+    // STA Failed so load softAP
     Serial.println("Wireless Station Failed");
     Serial.println("Now try a SoftAP");
     digitalWrite(REDLED, HIGH);
     delay(1000);
+	if ( !trySoftSSID()  ) {
+		Serial.println("SoftAP failed");
+		digitalWrite(REDLED, HIGH);
+	}
   }
 
-  if ( !trySoftSSID()  ) {
-    Serial.println("SoftAP failed");
-    digitalWrite(REDLED, HIGH);
-  }
+  
 
   //  Setup mqtt
   if (setupMQTT() == 1){

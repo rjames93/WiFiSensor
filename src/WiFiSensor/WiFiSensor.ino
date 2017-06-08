@@ -32,6 +32,8 @@ String mqttusername;
 String mqttpassword;
 String mqtthumiditytopic;
 String mqtttemperaturetopic;
+float tempoffset;
+float humidityoffset;
 bool deepsleepmode = false;
 bool mqttmode = false;
 bool serialmode = false;
@@ -156,8 +158,11 @@ void loop() {
           String topicname("sensors/");
           topicname += String(sensorname);
           topicname += String("/");
+		  /*
+		  //Manual Variable Setting
           mqtttemperaturetopic = "temperature";
           mqtthumiditytopic = "humidity";
+		  */
           snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
           mqttpublish((topicname + mqtttemperaturetopic), msg);
           snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
