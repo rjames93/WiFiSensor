@@ -131,48 +131,98 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  httpServer.handleClient();
-  long timer = (millis() % 30000); // This will reset every 30000 milliseconds a.k.a every 30 seconds
-  if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
-    dhtmeasure();
-    if (serialmode == true) { // Print to Serial
-      Serial.print("Temp: ");
-      Serial.print(lastmeasurement.temperature);
-      Serial.print("°C, Relative Humidity: ");
-      Serial.print(lastmeasurement.humidity);
-      Serial.println("%");
-      //Serial.println(millis());
-    }
+	if(!deepsleepmode){
+		//DeepSleep Is disabled so enable Webserver
+		httpServer.handleClient();
+		long timer = (millis() % 30000); // This will reset every 30000 milliseconds a.k.a every 30 seconds
+		  
+		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
+			dhtmeasure();
+			if (serialmode == true) { // Print to Serial
+			  Serial.print("Temp: ");
+			  Serial.print(lastmeasurement.temperature);
+			  Serial.print("°C, Relative Humidity: ");
+			  Serial.print(lastmeasurement.humidity);
+			  Serial.println("%");
+			  //Serial.println(millis());
+			}
 
-    if (mqttmode == true) { // Send data to MQTT Broker
-      Serial.println("Handling MQTT");
-      if ( timer <= 100 ) {
-        Serial.println("Gathering Data");
-        // We need to report to the MQTT Server
-        if (mqttconnect() != 0) {
-          Serial.println("Unable to connect to MQTT Server");
-        } else {
-          // Connect to MQTT Server
-          //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
-          //Following is original
-          String topicname("sensors/");
-          topicname += String(sensorname);
-          topicname += String("/");
-		  /*
-		  //Manual Variable Setting
-          mqtttemperaturetopic = "temperature";
-          mqtthumiditytopic = "humidity";
-		  */
-          snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-          mqttpublish((topicname + mqtttemperaturetopic), msg);
-          snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-          mqttpublish((topicname + mqtthumiditytopic), msg);
-        }
+			if (mqttmode == true) { // Send data to MQTT Broker
+			  Serial.println("Handling MQTT");
+			  if ( timer <= 100 ) {
+				Serial.println("Gathering Data");
+				// We need to report to the MQTT Server
+				if (mqttconnect() != 0) {
+				  Serial.println("Unable to connect to MQTT Server");
+				} else {
+				  // Connect to MQTT Server
+				  //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
+				  //Following is original
+				  String topicname("sensors/");
+				  topicname += String(sensorname);
+				  topicname += String("/");
+				  /*
+				  //Manual Variable Setting
+				  mqtttemperaturetopic = "temperature";
+				  mqtthumiditytopic = "humidity";
+				  */
+				  snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
+				  mqttpublish((topicname + mqtttemperaturetopic), msg);
+				  snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
+				  mqttpublish((topicname + mqtthumiditytopic), msg);
+				}
 
 
-      }
-    }
+			  }
+			}
+		}
+	}	else{
+		//DeepSleep Enabled
+		long timer = (millis() % 300000); // This will reset every 300000 milliseconds a.k.a every 5 minutes
+		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
+			dhtmeasure();
+			if (serialmode == true) { // Print to Serial
+			  Serial.print("Temp: ");
+			  Serial.print(lastmeasurement.temperature);
+			  Serial.print("°C, Relative Humidity: ");
+			  Serial.print(lastmeasurement.humidity);
+			  Serial.println("%");
+			  //Serial.println(millis());
+			}
 
-  }
+			if (mqttmode == true) { // Send data to MQTT Broker
+			  Serial.println("Handling MQTT");
+			  if ( timer <= 100 ) {
+				Serial.println("Gathering Data");
+				// We need to report to the MQTT Server
+				if (mqttconnect() != 0) {
+				  Serial.println("Unable to connect to MQTT Server");
+				} else {
+				  // Connect to MQTT Server
+				  //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
+				  //Following is original
+				  String topicname("sensors/");
+				  topicname += String(sensorname);
+				  topicname += String("/");
+				  /*
+				  //Manual Variable Setting
+				  mqtttemperaturetopic = "temperature";
+				  mqtthumiditytopic = "humidity";
+				  */
+				  snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
+				  mqttpublish((topicname + mqtttemperaturetopic), msg);
+				  snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
+				  mqttpublish((topicname + mqtthumiditytopic), msg);
+				}
+
+
+			  }
+			}
+		}
+	}
+
+  
+  
+
+
 }
-
