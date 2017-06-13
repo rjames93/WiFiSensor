@@ -134,10 +134,11 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  long timer = (millis() % 30000);
 	if(!deepsleepmode){
 		//DeepSleep Is disabled so enable Webserver
 		httpServer.handleClient();
-		long timer = (millis() % 30000); // This will reset every 30000 milliseconds a.k.a every 30 seconds
+		 // This will reset every 30000 milliseconds a.k.a every 30 seconds
 		  
 		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
 			dhtmeasure();
