@@ -1,6 +1,6 @@
 void dhtmeasure(){
-  struct measurements tmp;
-  bool dhtOK = false
+  //struct measurements tmp;
+  bool dhtOK = false;
   
   while( !dhtOK){ //Loop to wait for good DHT value
 	dhtOK = true; //assume it is going to work
@@ -13,6 +13,7 @@ void dhtmeasure(){
 	}
 	
 	if(!dhtOK){
+		Serial.print("DHT Not Ready");
 		delay(200);
 	}
 	

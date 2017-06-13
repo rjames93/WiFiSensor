@@ -49,9 +49,6 @@ const int GREENLED = 4;
 const int REDLED = 5;
 const int DHTPIN = 14;
 
-/* Deep Sleep Timeout */
-const int sleepTimeS = 60;
-
 /* DHT Class */
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
@@ -134,11 +131,12 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  long timer = (millis() % 30000);
+  
 	if(!deepsleepmode){
 		//DeepSleep Is disabled so enable Webserver
 		httpServer.handleClient();
 		 // This will reset every 30000 milliseconds a.k.a every 30 seconds
+		long timer = (millis() % 30000);
 		  
 		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
 			dhtmeasure();
