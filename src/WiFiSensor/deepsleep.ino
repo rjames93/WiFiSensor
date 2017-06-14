@@ -2,7 +2,10 @@ void deepsleep() {
   if (!configloaded) {
     loadconfig();
   }
-  int sleepinterval = 10; // seconds
+  int sleepinterval = 30; // seconds
+  bool mqttconnectsuccess = false;
+  bool mqtttimeout = false;
+  int mqttfailcount = 0;
   
   if ( !trySTAWiFi() ) {
     // STA Failed so load softAP
@@ -16,6 +19,18 @@ void deepsleep() {
 		digitalWrite(GREENLED, LOW);
 		ESP.deepSleep(sleepinterval * 1000000);
 	}
+  }
+  //  Setup mqtt
+  if (setupMQTT() == 1){
+    // Ignore this outcome it hasn't done anything
+  } else {
+    // We have setupMQTT
+    if( mqttconnect() != 0 ){
+      // Haven't been able to connect :|
+      // Handle this exception. Probably reload?
+      Serial.println("Unable to connect to MQTT after reset");
+
+    }
   }
   dhtinit();
   dhtmeasure();
@@ -36,9 +51,26 @@ void deepsleep() {
 	  
 	
 	// We need to report to the MQTT Server
-	if (mqttconnect() != 0) {
-	  Serial.println("Unable to connect to MQTT Server");
-	} else {
+	while (!mqtttimeout) {
+	  if(mqttconnect() != 0){
+		  Serial.println("Unable to connect to MQTT Server " + mqttfailcount + " tries");
+		  delay(1000);
+	      mqttfailcount++;
+	  } else {
+		  Serial.println("MQTT Successfully Connected");
+		  mqtttimeout = true;
+		  mqttsuccess = true;
+	  }
+	  
+	  if(mqttfailcount >= 30 ){
+		  Serial.println("Giving up MQTT connection after "+ mqttfailcount + " tries" );
+		  mqtttimeout = true;
+	  }
+	  
+	  
+	}
+	
+	if(mqttsuccess){
 	  // Connect to MQTT Server
 	  //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
 	  //Following is original
@@ -60,6 +92,7 @@ void deepsleep() {
 	  
   
 
+  Serial.println("Sleep for " + sleepinterval + "s");
 
   digitalWrite(REDLED, LOW);
   digitalWrite(GREENLED, LOW);
