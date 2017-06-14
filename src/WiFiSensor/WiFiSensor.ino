@@ -194,7 +194,7 @@ void loop() {
 			httpServer.handleClient();
 			// This will reset every 2000 milliseconds a.k.a every 2 seconds
 			long dstimer = (millis() % 2000);
-			if ( dstimer <= 10 ){
+			if ( dstimer <= 100 ){
 				dsOverrideCycleCount++;
 			}
 			if ( dstimer <= 1000 ){
@@ -205,8 +205,8 @@ void loop() {
 				digitalWrite(GREENLED, LOW);
 				digitalWrite(REDLED, LOW);
 			}
-			
-			if( dsOverrideCycleCount > 30){
+			delay(200);
+			if( dsOverrideCycleCount >= 30){
 				dsWebOverride = false;
 				Serial.println("Deep Sleep Web Override Finished, sleep for 10s");
 				digitalWrite(GREENLED, LOW);
