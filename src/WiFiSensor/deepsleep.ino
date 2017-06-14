@@ -64,7 +64,7 @@ void deepsleep() {
 	  }
 	  
 	  if(mqttfailcount >= 30 ){
-		  Serial.println("Giving up MQTT connection"" );
+		  Serial.println("Giving up MQTT connection" );
 		  mqtttimeout = true;
 	  }
 	  
