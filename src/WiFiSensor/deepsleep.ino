@@ -2,13 +2,28 @@ void deepsleep() {
   if (!configloaded) {
     loadconfig();
   }
+  int sleepinterval = 600; // seconds
+  
+  if ( !trySTAWiFi() ) {
+    // STA Failed so load softAP
+    Serial.println("Wireless Station Failed");
+    digitalWrite(REDLED, HIGH);
+    delay(2000);
+	if ( !trySTAWiFi()  ) {
+		Serial.println("SoftAP failed 2");
+		Serial.println("Give Up and DeepSleep");
+		digitalWrite(REDLED, LOW);
+		digitalWrite(GREENLED, LOW);
+		ESP.deepSleep(sleepinterval * 1000000);
+	}
+  }
   dhtinit();
   dhtmeasure();
-  int sleepinterval = 600; // seconds
+  
   // Basically Deepsleep needs MQTT on in order to do stuff else it's going to do nothing cause it won't be able to respond to http requests
 
-  if (mqttmode == true) {
-	  Serial.println("Handling MQTT");
+  
+	Serial.println("Handling MQTT");
 	  
 	Serial.println("Gathering Data");
 	// We need to report to the MQTT Server
@@ -34,9 +49,11 @@ void deepsleep() {
 
 
 	  
-  }
+  
 
 
-  ESP.deepSleep(sleepinterval * 1000000, WAKE_RF_DEFAULT);
+  digitalWrite(REDLED, LOW);
+  digitalWrite(GREENLED, LOW);
+  ESP.deepSleep(sleepinterval * 1000000);
 }
 
