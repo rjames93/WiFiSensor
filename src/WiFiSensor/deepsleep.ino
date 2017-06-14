@@ -53,7 +53,8 @@ void deepsleep() {
 	// We need to report to the MQTT Server
 	while (!mqtttimeout) {
 	  if(mqttconnect() != 0){
-		  Serial.println("Unable to connect to MQTT Server " + mqttfailcount + " tries");
+		  Serial.println("Unable to connect to MQTT Server ");
+		  Serial.println(mqttfailcount);
 		  delay(1000);
 	      mqttfailcount++;
 	  } else {
@@ -63,14 +64,14 @@ void deepsleep() {
 	  }
 	  
 	  if(mqttfailcount >= 30 ){
-		  Serial.println("Giving up MQTT connection after "+ mqttfailcount + " tries" );
+		  Serial.println("Giving up MQTT connection"" );
 		  mqtttimeout = true;
 	  }
 	  
 	  
 	}
 	
-	if(mqttsuccess){
+	if(mqttconnectsuccess){
 	  // Connect to MQTT Server
 	  //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
 	  //Following is original
@@ -92,7 +93,9 @@ void deepsleep() {
 	  
   
 
-  Serial.println("Sleep for " + sleepinterval + "s");
+  Serial.print("ESP Sleep for ");
+  Serial.print(sleepinterval);
+  Serial.print(" seconds.");
 
   digitalWrite(REDLED, LOW);
   digitalWrite(GREENLED, LOW);
