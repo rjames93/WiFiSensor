@@ -96,7 +96,7 @@ void setup() {
     case 0:
       // Normal Startup by Power On
       Serial.println("Normal Power On");
-	  sWebOverride = true;
+	  dsWebOverride = true;
 	  dsOverrideCycleCount = 0;
       ESP.restart();
       break;
@@ -194,10 +194,10 @@ void loop() {
 			httpServer.handleClient();
 			// This will reset every 2000 milliseconds a.k.a every 2 seconds
 			long dstimer = (millis() % 2000);
-			if ( timer <= 10 ){
-				dsOverrideCycleCount++
+			if ( dstimer <= 10 ){
+				dsOverrideCycleCount++;
 			}
-			if ( timer <= 1000 ){
+			if ( dstimer <= 1000 ){
 				//Flashes the LED ON/OFF every second
 				digitalWrite(GREENLED, HIGH);
 				digitalWrite(REDLED, HIGH);
