@@ -2,7 +2,7 @@ void deepsleep() {
   if (!configloaded) {
     loadconfig();
   }
-  int sleepinterval = 30; // seconds
+  int sleepinterval = 600; // seconds
   bool mqttconnectsuccess = false;
   bool mqtttimeout = false;
   int mqttfailcount = 0;
