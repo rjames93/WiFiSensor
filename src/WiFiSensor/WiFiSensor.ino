@@ -108,7 +108,7 @@ void setup() {
     case 2:
       // Exception Reset, GPIO status won't change
       Serial.println("Exception Reset");
-	  sWebOverride = true;
+	  dsWebOverride = true;
 	  dsOverrideCycleCount = 0;
       ESP.restart();
       break;
