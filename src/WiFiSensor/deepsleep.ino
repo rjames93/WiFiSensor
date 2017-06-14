@@ -2,7 +2,7 @@ void deepsleep() {
   if (!configloaded) {
     loadconfig();
   }
-  int sleepinterval = 600; // seconds
+  int sleepinterval = 10; // seconds
   
   if ( !trySTAWiFi() ) {
     // STA Failed so load softAP
@@ -20,12 +20,21 @@ void deepsleep() {
   dhtinit();
   dhtmeasure();
   
+  if (serialmode == true) { // Print to Serial
+			  Serial.print("Temp: ");
+			  Serial.print(lastmeasurement.temperature);
+			  Serial.print("°C, Relative Humidity: ");
+			  Serial.print(lastmeasurement.humidity);
+			  Serial.println("%");
+			  //Serial.println(millis());
+			}
+  
   // Basically Deepsleep needs MQTT on in order to do stuff else it's going to do nothing cause it won't be able to respond to http requests
 
   
 	Serial.println("Handling MQTT");
 	  
-	Serial.println("Gathering Data");
+	
 	// We need to report to the MQTT Server
 	if (mqttconnect() != 0) {
 	  Serial.println("Unable to connect to MQTT Server");
