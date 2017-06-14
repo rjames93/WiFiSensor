@@ -60,7 +60,7 @@ void deepsleep() {
 	  } else {
 		  Serial.println("MQTT Successfully Connected");
 		  mqtttimeout = true;
-		  mqttsuccess = true;
+		  mqttconnectsuccess = true;
 	  }
 	  
 	  if(mqttfailcount >= 30 ){
