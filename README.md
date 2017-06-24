@@ -37,10 +37,12 @@ Default JSON (formatted by the UI and can be copy/pasted back in) is:
     "temperature-offset": "0",
     "humidity-offset": "0"
   },
+  "update_rates": {
+    "normal_rate_s": "30",
+    "deepsleep_rate_s": "600"
+  },
   "last_modification": 0,
   "sensorname": "SmartSensor"
 }
 
 
-And in RAW:
- {"wifi":{"ssid":"default","password":"default","channel":1},"softap":{"ssid":"SmartSensor"},"features":{"deepsleep":false,"mqtt":false,"serial":true},"mqtt-settings":{"mqtt_server":"127.0.0.1","mqtt_port":1883,"client_name":"SmartSensor","username":"","password":"","temperaturetopic":"temperature","humiditytopic":"humidity"},"calibration":{"temperature-offset":"0","humidity-offset":"0"},"last_modification":0,"sensorname":"SmartSensor"}

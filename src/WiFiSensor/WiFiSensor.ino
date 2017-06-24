@@ -34,6 +34,8 @@ String mqtthumiditytopic;
 String mqtttemperaturetopic;
 float tempoffset;
 float humidityoffset;
+long normalupdate = 30;
+long deepsleepupdate = 600;
 bool deepsleepmode = false;
 bool mqttmode = false;
 bool serialmode = false;
@@ -144,8 +146,8 @@ void loop() {
 	if(!deepsleepmode){
 		//DeepSleep Is disabled so enable Webserver
 		httpServer.handleClient();
-		 // This will reset every 30000 milliseconds a.k.a every 30 seconds
-		long timer = (millis() % 30000);
+		 // This will reset every 30000 milliseconds a.k.a every 30 seconds by default
+		long timer = (millis() % (1000*normalupdate));
 		  
 		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
 			dhtmeasure();

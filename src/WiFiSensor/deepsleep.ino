@@ -2,7 +2,7 @@ void deepsleep() {
   if (!configloaded) {
     loadconfig();
   }
-  int sleepinterval = 600; // seconds
+  
   bool mqttconnectsuccess = false;
   bool mqtttimeout = false;
   int mqttfailcount = 0;
@@ -17,7 +17,7 @@ void deepsleep() {
 		Serial.println("Give Up and DeepSleep");
 		digitalWrite(REDLED, LOW);
 		digitalWrite(GREENLED, LOW);
-		ESP.deepSleep(sleepinterval * 1000000);
+		ESP.deepSleep(deepsleepupdate * 1000000);
 	}
   }
   //  Setup mqtt
@@ -94,11 +94,11 @@ void deepsleep() {
   
 
   Serial.print("ESP Sleep for ");
-  Serial.print(sleepinterval);
+  Serial.print(deepsleepupdate);
   Serial.print(" seconds.");
 
   digitalWrite(REDLED, LOW);
   digitalWrite(GREENLED, LOW);
-  ESP.deepSleep(sleepinterval * 1000000);
+  ESP.deepSleep(deepsleepupdate * 1000000);
 }
 

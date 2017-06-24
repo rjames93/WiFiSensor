@@ -7,7 +7,7 @@ void createdefaultconfig() {
     Serial.println("Unable to open the file: /default.cfg");
     return;
   }
-  StaticJsonBuffer<896> jsonBuffer;
+  StaticJsonBuffer<1024> jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
   
   StaticJsonBuffer<128> wifibuffer;
@@ -46,6 +46,12 @@ void createdefaultconfig() {
   calib["temperature-offset"] = "0";
   calib["humidity-offset"] = "0";
   root["calibration"] = calib;
+  
+  StaticJsonBuffer<128> timingbuffer;
+  JsonObject &timing = timingbuffer.createObject();
+  timing["normal_rate_s"] = "30";
+  timing["deepsleep_rate_s"] = "600";
+  root["update_rates"] = timing;
 
   root["last_modification"] = 0; // Default values. Basically we just check to see if this value is not 0
   root["sensorname"] = "SmartSensor";
@@ -124,6 +130,9 @@ int loadconfig() {
   //}
   tempoffset = root["calibration"]["temperature-offset"].as<float>();
   humidityoffset = root["calibration"]["humidity-offset"].as<float>();
+  
+  normalupdate = root["update_rates"]["normal_rate_s"].as<long>();
+  deepsleepupdate = root["update_rates"]["deepsleep_rate_s"].as<long>();
 
   lastmodification = root["last_modification"];
   sensorname = root["sensorname"].asString();
