@@ -7,7 +7,7 @@ void createdefaultconfig() {
     Serial.println("Unable to open the file: /default.cfg");
     return;
   }
-  StaticJsonBuffer<1024> jsonBuffer;
+  StaticJsonBuffer<1280> jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
   
   StaticJsonBuffer<128> wifibuffer;
@@ -29,6 +29,15 @@ void createdefaultconfig() {
   features["mqtt"] = false;
   features["serial"] = true;
   root["features"] = features;
+  
+  StaticJsonBuffer<256> featuresBuffer;
+  JsonObject &boardconf = featuresBuffer.createObject();
+  features["led-grn-d1"] = true;
+  features["led-red-d2"] = true;
+  features["dht-1-d5"] = true;
+  features["dht-2-d6"] = false;
+  features["batt-1-a0"] = false;
+  root["board-conf"] = features;
   
   StaticJsonBuffer<256> mqttbuffer;
   JsonObject &mqtt = mqttbuffer.createObject();
@@ -117,6 +126,13 @@ int loadconfig() {
   deepsleepmode = root["features"]["deepsleep"];
   mqttmode = root["features"]["mqtt"];
   serialmode = root["features"]["serial"];
+
+  //Use Bools for the board Config
+  ledGRNd1 = root["board-conf"]["led-grn-d1"];
+  ledREDd2 = root["board-conf"]["led-red-d2"];
+  dht1d5 = root["board-conf"]["dht-1-d5"];
+  dht2d6 = root["board-conf"]["dht-2-d6"];
+  batt1a0 = root["board-conf"]["batt-1-a0"]; 
 
   //if (mqttmode == true) {
   //Overridden for now to ensure mqtt is read

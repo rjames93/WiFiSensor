@@ -10,11 +10,15 @@ void extsysreset() {
     // STA Failed so load softAP
     Serial.println("Wireless Station Failed");
     Serial.println("Now try a SoftAP");
-    digitalWrite(REDLED, HIGH);
+    if(ledREDd2){
+      digitalWrite(REDLED, HIGH);
+    }
     delay(1000);
 	if ( !trySoftSSID()  ) {
 		Serial.println("SoftAP failed");
-		digitalWrite(REDLED, HIGH);
+    if(ledREDd2){
+      digitalWrite(REDLED, HIGH);
+    }
 	}
   }
 
@@ -35,7 +39,10 @@ void extsysreset() {
 
   // Should now be connected to the MQTT Server
 
-  digitalWrite(GREENLED, HIGH);
+  if(ledGRNd1){
+    digitalWrite(GREENLED, HIGH);
+  }
+
   // Setup the WebServer
   httpUpdater.setup(&httpServer);
   httpServer.on("/config", httpConfigure);

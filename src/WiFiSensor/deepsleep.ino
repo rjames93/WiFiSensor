@@ -10,7 +10,9 @@ void deepsleep() {
   if ( !trySTAWiFi() ) {
     // STA Failed so load softAP
     Serial.println("Wireless Station Failed");
-    digitalWrite(REDLED, HIGH);
+    if(ledREDd2){
+      digitalWrite(REDLED, HIGH);
+    }
     delay(2000);
 	if ( !trySTAWiFi()  ) {
 		Serial.println("SoftAP failed 2");
@@ -38,7 +40,7 @@ void deepsleep() {
   if (serialmode == true) { // Print to Serial
 			  Serial.print("Temp: ");
 			  Serial.print(lastmeasurement.temperature);
-			  Serial.print("°C, Relative Humidity: ");
+			  Serial.print("ï¿½C, Relative Humidity: ");
 			  Serial.print(lastmeasurement.humidity);
 			  Serial.println("%");
 			  //Serial.println(millis());

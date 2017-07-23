@@ -34,6 +34,9 @@ String mqtthumiditytopic;
 String mqtttemperaturetopic;
 float tempoffset;
 float humidityoffset;
+float temp2offset;
+float humidity2offset;
+int battvalue;
 long normalupdate = 30;
 long deepsleepupdate = 600;
 bool deepsleepmode = false;
@@ -45,17 +48,28 @@ int dsOverrideCycleCount = 0;
 long lastmodification = 0;
 struct measurements lastmeasurement;
 
+/* board configuation booleans */
+bool ledGRNd1 = false;
+bool ledREDd2 = false;
+bool dht1d5 = true;
+bool dht2d6 = false;
+bool batt1a0 = false; 
+
 /* Software Version Management */
-String firmwareversion = "0.0.6";
+String firmwareversion = "0.0.7";
 
 /* PIN definitions */
 const int GREENLED = 4;
 const int REDLED = 5;
 const int DHTPIN = 14;
+const int DHT2PIN = 12;
+const int BATTPIN = A0;
+
 
 /* DHT Class */
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
+DHT dht2(DHT2PIN, DHTTYPE);
 
 void setup() {
 
@@ -86,7 +100,6 @@ void setup() {
   Serial.println("");
   pinMode(GREENLED, OUTPUT);
   pinMode(REDLED, OUTPUT);
-
   digitalWrite(GREENLED, LOW);
   digitalWrite(REDLED, LOW);
 
@@ -201,8 +214,13 @@ void loop() {
 			}
 			if ( dstimer <= 1000 ){
 				//Flashes the LED ON/OFF every second
-				digitalWrite(GREENLED, HIGH);
-				digitalWrite(REDLED, HIGH);
+				if(ledGRNd1){
+					  digitalWrite(GREENLED, HIGH);
+				  }
+				  if(ledREDd2){
+					  digitalWrite(REDLED, HIGH);
+				  }
+
 			} else{
 				digitalWrite(GREENLED, LOW);
 				digitalWrite(REDLED, LOW);

@@ -130,6 +130,12 @@ void landingPage() {
   html += String(lastmeasurement.temperature);
   html += String("<br><p>Relative Humidity (%): ");
   html += String(lastmeasurement.humidity);
+  html += String("<p>Temperature 2 (°C): ");
+  html += String(lastmeasurement.temperature2);
+  html += String("<br><p>Relative Humidity 2 (%): ");
+  html += String(lastmeasurement.humidity2);
+  html += String("<br><p>Voltage (V): ");
+  html += String(lastmeasurement.voltage);
   html += String("<br><hr><br><h2> Other Links: <ul><li><a href=\"/config\"> Configuration Page</a></li><li><a href=\"/update\"> Firmware Updater</a></li></ul>");
   html += String("</body></html>");
   Serial.println("/ Requested");
