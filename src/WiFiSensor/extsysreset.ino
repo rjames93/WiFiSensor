@@ -3,12 +3,18 @@ void extsysreset() {
   createdefaultconfig();
   // Load the Config
   if(loadconfig()== 1){
+    SPIFFS.begin();
     Serial.println("Deleting Custom Config");
     SPIFFS.remove("/configuration.cfg");
     Serial.println("Deleting Default Config");
     SPIFFS.remove("/default.cfg");
+    SPIFFS.end();
     createdefaultconfig();
-    loadconfig();
+    if(loadconfig()== 1){
+      Serial.println("Failed on second Try, setting fallback values");
+      wifissid = "SmartSensor";
+      normalupdate = 30;
+    }
   }
   // Config is now loaded.
   delay(1000);

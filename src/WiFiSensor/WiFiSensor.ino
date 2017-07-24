@@ -165,11 +165,27 @@ void loop() {
 		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
 			dhtmeasure();
 			if (serialmode == true) { // Print to Serial
-			  Serial.print("Temp: ");
-			  Serial.print(lastmeasurement.temperature);
-			  Serial.print("°C, Relative Humidity: ");
-			  Serial.print(lastmeasurement.humidity);
-			  Serial.println("%");
+        if(dht1d5){
+          Serial.print("Temp: ");
+          Serial.print(lastmeasurement.temperature);
+          Serial.print("°C, Relative Humidity: ");
+          Serial.print(lastmeasurement.humidity);
+          Serial.println("%");
+        }
+        if(dht2d6){
+          Serial.print("Temp2: ");
+          Serial.print(lastmeasurement.temperature2);
+          Serial.print("°C, Relative Humidity: ");
+          Serial.print(lastmeasurement.humidity2);
+          Serial.println("%");
+        }
+        if(batt1a0){
+          Serial.print("Voltage: ");
+          Serial.print(lastmeasurement.voltage);
+          Serial.println("V");
+        }
+        
+			  
 			  //Serial.println(millis());
 			}
 
@@ -192,17 +208,22 @@ void loop() {
 				  mqtttemperaturetopic = "temperature";
 				  mqtthumiditytopic = "humidity";
 				  */
-				  snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-				  mqttpublish((topicname + mqtttemperaturetopic), msg);
-				  snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-				  mqttpublish((topicname + mqtthumiditytopic), msg);
-          snprintf(msg, 25, "%s", String(lastmeasurement.temperature2).c_str());
-          mqttpublish((topicname + mqtttemperaturetopic +"2"), msg);
-          snprintf(msg, 75, "%s", String(lastmeasurement.humidity2).c_str());
-          mqttpublish((topicname + mqtthumiditytopic+"2"), msg);
-          snprintf(msg, 25, "%s", String(lastmeasurement.voltage).c_str());
-          mqttpublish((topicname + "voltage"), msg);
-
+          if(dht1d5){
+            snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
+            mqttpublish((topicname + mqtttemperaturetopic), msg);
+            snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
+            mqttpublish((topicname + mqtthumiditytopic), msg);
+          }
+          if(dht2d6){
+            snprintf(msg, 25, "%s", String(lastmeasurement.temperature2).c_str());
+            mqttpublish((topicname + mqtttemperaturetopic +"2"), msg);
+            snprintf(msg, 75, "%s", String(lastmeasurement.humidity2).c_str());
+            mqttpublish((topicname + mqtthumiditytopic+"2"), msg);
+          }
+          if(batt1a0){
+            snprintf(msg, 25, "%s", String(lastmeasurement.voltage).c_str());
+            mqttpublish((topicname + "voltage"), msg);
+          }
           
 				}
 

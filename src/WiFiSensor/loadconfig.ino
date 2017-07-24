@@ -7,7 +7,7 @@ void createdefaultconfig() {
     Serial.println("Unable to open the file: /default.cfg");
     return;
   }
-  StaticJsonBuffer<1280> jsonBuffer;
+  DynamicJsonBuffer jsonBuffer;
   JsonObject &root = jsonBuffer.createObject();
   
   StaticJsonBuffer<128> wifibuffer;
@@ -97,28 +97,6 @@ int loadconfig() {
   
   String confjson = f.readStringUntil('\n');
   Serial.println(confjson);
-  //Check certain parts of the JSON to ensure it is compatible with this version
-  if(confjson.indexOf("wifi") == -1){
-    //String not found error case
-    Serial.println("Error: Config does not contain 'wifi'");
-    return (1);
-  }
-  if(confjson.indexOf("features") == -1){
-    //String not found error case
-    Serial.println("Error: Config does not contain 'features'");
-    return (1);
-  }
-  if(confjson.indexOf("board-conf") == -1){
-    //String not found error case
-    Serial.println("Error: Config does not contain 'board-conf'");
-    return (1);
-  }
-  if(confjson.indexOf("update_rates") == -1){
-    //String not found error case
-    Serial.println("Error: Config does not contain 'update_rates'");
-    return (1);
-  }
-
   
   int jsstrlength = confjson.length();
   Serial.print("JSON String Length: ");
@@ -127,16 +105,41 @@ int loadconfig() {
   //jsstr = confjson.c_str();
   Serial.println(jsstr);
   strcpy(jsstr, confjson.c_str());
-  StaticJsonBuffer<1280> jsonBuffer;
+  DynamicJsonBuffer jsonBuffer;
   JsonObject &root = jsonBuffer.parseObject(jsstr);
   if (!root.success()) {
     Serial.println("JSON Parsing fail");
     f.close();
+    SPIFFS.end();
     return (1);
   }
   f.close();
+  SPIFFS.end();
   Serial.println();
   // Config is now loaded.
+
+  //Check certain parts of the JSON to ensure it is compatible with this version
+  if(!root.containsKey("wifi")){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'wifi'");
+    return (1);
+  }
+  if(!root.containsKey("features")){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'features'");
+    return (1);
+  }
+  if(!root.containsKey("board-conf")){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'board-conf'");
+    return (1);
+  }
+  if(!root.containsKey("update_rates")){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'update_rates'");
+    return (1);
+  }
+  
   // Use the JSON root object to assign the values to the global variables
   wifissid = root["wifi"]["ssid"].asString();
   Serial.print("WiFi SSID: ");
@@ -184,6 +187,5 @@ int loadconfig() {
   // Set configloaded flag
   configloaded = true;
   Serial.println("Config Loaded");
-  SPIFFS.end();
   return (0);
 }

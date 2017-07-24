@@ -19,7 +19,7 @@ void httpConfigure() {
   char *jsstr = (char *)malloc(jsstrlength * sizeof(char) + 1);
   strcpy(jsstr, confjson.c_str());
   Serial.println(jsstr);
-  StaticJsonBuffer<512> jsonBuffer;
+  DynamicJsonBuffer jsonBuffer;
   JsonObject &root = jsonBuffer.parseObject(jsstr);
   if (!root.success()) {
     Serial.println("JSON Parsing fail");
@@ -56,7 +56,7 @@ void httpConfigure() {
 
 void testandapplyconfig() {
   SPIFFS.begin();
-  StaticJsonBuffer<512> httpjsonBuffer;
+  DynamicJsonBuffer httpjsonBuffer;
   int lengthofinput = httpServer.arg(0).length();
   Serial.println(lengthofinput);
   char *string = (char *)malloc( (lengthofinput + 1) * sizeof(char) );
