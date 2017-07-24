@@ -2,7 +2,14 @@ void extsysreset() {
   // Create the default Config
   createdefaultconfig();
   // Load the Config
-  loadconfig();
+  if(loadconfig()== 1){
+    Serial.println("Deleting Custom Config");
+    SPIFFS.remove("/configuration.cfg");
+    Serial.println("Deleting Default Config");
+    SPIFFS.remove("/default.cfg");
+    createdefaultconfig();
+    loadconfig();
+  }
   // Config is now loaded.
   delay(1000);
   // Try connecting to the WiFi using the config file

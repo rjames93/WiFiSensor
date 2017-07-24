@@ -93,9 +93,32 @@ int loadconfig() {
     Serial.println("Unable to open the file: /default.cfg");
     return (1);
   }
-
+  
   String confjson = f.readStringUntil('\n');
   Serial.println(confjson);
+  //Check certain parts of the JSON to ensure it is compatible with this version
+  if(confjson.indexOf("wifi") == -1){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'wifi'");
+    return (1);
+  }
+  if(confjson.indexOf("features") == -1){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'features'");
+    return (1);
+  }
+  if(confjson.indexOf("board-conf") == -1){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'board-conf'");
+    return (1);
+  }
+  if(confjson.indexOf("update_rates") == -1){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'update_rates'");
+    return (1);
+  }
+
+  
   int jsstrlength = confjson.length();
   Serial.print("JSON String Length: ");
   Serial.println(jsstrlength);

@@ -146,8 +146,8 @@ void setup() {
     case 6:
       // External System Reset
       Serial.println("External System Reset");
-	  dsWebOverride = true;
-	  dsOverrideCycleCount = 0;
+	    dsWebOverride = true;
+	    dsOverrideCycleCount = 0;
       extsysreset();
       break;
   }
