@@ -54,6 +54,8 @@ void createdefaultconfig() {
   JsonObject &calib = calbuffer.createObject();
   calib["temperature-offset"] = "0";
   calib["humidity-offset"] = "0";
+  calib["temperature2-offset"] = "0";
+  calib["humidity2-offset"] = "0";
   root["calibration"] = calib;
   
   StaticJsonBuffer<128> timingbuffer;
@@ -101,7 +103,7 @@ int loadconfig() {
   //jsstr = confjson.c_str();
   Serial.println(jsstr);
   strcpy(jsstr, confjson.c_str());
-  StaticJsonBuffer<512> jsonBuffer;
+  StaticJsonBuffer<1280> jsonBuffer;
   JsonObject &root = jsonBuffer.parseObject(jsstr);
   if (!root.success()) {
     Serial.println("JSON Parsing fail");
@@ -134,18 +136,19 @@ int loadconfig() {
   dht2d6 = root["board-conf"]["dht-2-d6"];
   batt1a0 = root["board-conf"]["batt-1-a0"]; 
 
-  //if (mqttmode == true) {
-  //Overridden for now to ensure mqtt is read
-    mqttserver = root["mqtt-settings"]["mqtt_server"].asString();
-    mqttport = root["mqtt-settings"]["mqtt_port"];
-    mqttclientname = root["mqtt-settings"]["client_name"].asString();
-    mqttusername = root["mqtt-settings"]["username"].asString();
-    mqttpassword = root["mqtt-settings"]["password"].asString();
-    mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
-    mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
-  //}
+
+  mqttserver = root["mqtt-settings"]["mqtt_server"].asString();
+  mqttport = root["mqtt-settings"]["mqtt_port"];
+  mqttclientname = root["mqtt-settings"]["client_name"].asString();
+  mqttusername = root["mqtt-settings"]["username"].asString();
+  mqttpassword = root["mqtt-settings"]["password"].asString();
+  mqtthumiditytopic = root["mqtt-settings"]["humiditytopic"].asString();
+  mqtttemperaturetopic = root["mqtt-settings"]["temperaturetopic"].asString();
+
   tempoffset = root["calibration"]["temperature-offset"].as<float>();
   humidityoffset = root["calibration"]["humidity-offset"].as<float>();
+  temp2offset = root["calibration"]["temperature2-offset"].as<float>();
+  humidity2offset = root["calibration"]["humidity2-offset"].as<float>();
   
   normalupdate = root["update_rates"]["normal_rate_s"].as<long>();
   deepsleepupdate = root["update_rates"]["deepsleep_rate_s"].as<long>();
