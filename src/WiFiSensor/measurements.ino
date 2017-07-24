@@ -30,7 +30,7 @@ void dhtmeasure(){
   }
  
   if(dht2d6){
-	dhtok = false;
+	dhtOK = false;
 	while( !dhtOK){ //Loop to wait for good DHT value
 		dhtOK = true; //assume it is going to work
 		dht.read();
