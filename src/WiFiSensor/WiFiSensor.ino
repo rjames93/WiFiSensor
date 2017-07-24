@@ -196,6 +196,15 @@ void loop() {
 				  mqttpublish((topicname + mqtttemperaturetopic), msg);
 				  snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
 				  mqttpublish((topicname + mqtthumiditytopic), msg);
+          
+          snprintf(msg, 25, "%s", String(lastmeasurement.temperature2).c_str());
+          mqttpublish((topicname + mqtttemperaturetopic +"2"), msg);
+          snprintf(msg, 75, "%s", String(lastmeasurement.humidity2).c_str());
+          mqttpublish((topicname + mqtthumiditytopic+"2"), msg);
+          snprintf(msg, 25, "%s", String(lastmeasurement.voltage).c_str());
+          mqttpublish((topicname + "voltage"), msg);
+
+          
 				}
 
 

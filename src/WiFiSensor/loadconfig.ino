@@ -30,14 +30,14 @@ void createdefaultconfig() {
   features["serial"] = true;
   root["features"] = features;
   
-  StaticJsonBuffer<256> featuresBuffer;
-  JsonObject &boardconf = featuresBuffer.createObject();
-  features["led-grn-d1"] = true;
-  features["led-red-d2"] = true;
-  features["dht-1-d5"] = true;
-  features["dht-2-d6"] = false;
-  features["batt-1-a0"] = false;
-  root["board-conf"] = features;
+  StaticJsonBuffer<256> boardconfBuffer;
+  JsonObject &boardconf = boardconfBuffer.createObject();
+  boardconf["led-grn-d1"] = true;
+  boardconf["led-red-d2"] = true;
+  boardconf["dht-1-d5"] = true;
+  boardconf["dht-2-d6"] = false;
+  boardconf["batt-1-a0"] = false;
+  root["board-conf"] = boardconf;
   
   StaticJsonBuffer<256> mqttbuffer;
   JsonObject &mqtt = mqttbuffer.createObject();

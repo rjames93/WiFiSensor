@@ -19,7 +19,7 @@ void dhtmeasure(){
 		}
 		if(retries == 200){
 			// Give up after 200 tries
-			dhtOK = true
+			dhtOK = true;
 		}
 	
 	}
@@ -47,7 +47,7 @@ void dhtmeasure(){
 		}
 		if(retries == 200){
 			// Give up after 200 tries
-			dhtOK = true
+			dhtOK = true;
 		}
 	
 	}
