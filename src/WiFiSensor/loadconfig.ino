@@ -74,6 +74,7 @@ void createdefaultconfig() {
   delay(0);
   f.close();
   SPIFFS.end();
+  Serial.println("Finished Default Conf Setup");
 }
 
 int loadconfig() {
