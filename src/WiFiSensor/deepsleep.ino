@@ -81,7 +81,7 @@ void deepsleep() {
 	  topicname += String(sensorname);
 	  topicname += String("/");
 	  
-	  mqttPrepAndPublish();
+	  mqttPrepAndPublish(topicname);
 	}
 
 

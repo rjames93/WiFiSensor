@@ -44,7 +44,7 @@ int trySoftSSID() {
 
 int closeSoftSSID() {
   WiFi.softAPdisconnect(true);
-  return(1):
+  return(1);
 }
 
 
