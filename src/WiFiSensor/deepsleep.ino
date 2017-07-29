@@ -80,15 +80,8 @@ void deepsleep() {
 	  String topicname("sensors/");
 	  topicname += String(sensorname);
 	  topicname += String("/");
-	  /*
-	  //Manual Variable Setting
-	  mqtttemperaturetopic = "temperature";
-	  mqtthumiditytopic = "humidity";
-	  */
-	  snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-	  mqttpublish((topicname + mqtttemperaturetopic), msg);
-	  snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-	  mqttpublish((topicname + mqtthumiditytopic), msg);
+	  
+	  mqttPrepAndPublish();
 	}
 
 

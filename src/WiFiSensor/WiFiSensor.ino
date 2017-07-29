@@ -56,7 +56,7 @@ bool dht2d6 = false;
 bool batt1a0 = false; 
 
 /* Software Version Management */
-String firmwareversion = "0.0.7";
+String firmwareversion = "0.0.8";
 
 /* PIN definitions */
 const int GREENLED = 4;
@@ -203,27 +203,12 @@ void loop() {
 				  String topicname("sensors/");
 				  topicname += String(sensorname);
 				  topicname += String("/");
-				  /*
-				  //Manual Variable Setting
-				  mqtttemperaturetopic = "temperature";
-				  mqtthumiditytopic = "humidity";
-				  */
-          if(dht1d5){
-            snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-            mqttpublish((topicname + mqtttemperaturetopic), msg);
-            snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-            mqttpublish((topicname + mqtthumiditytopic), msg);
-          }
-          if(dht2d6){
-            snprintf(msg, 25, "%s", String(lastmeasurement.temperature2).c_str());
-            mqttpublish((topicname + mqtttemperaturetopic +"2"), msg);
-            snprintf(msg, 75, "%s", String(lastmeasurement.humidity2).c_str());
-            mqttpublish((topicname + mqtthumiditytopic+"2"), msg);
-          }
-          if(batt1a0){
-            snprintf(msg, 25, "%s", String(lastmeasurement.voltage).c_str());
-            mqttpublish((topicname + "voltage"), msg);
-          }
+				 
+				  //MQTT Publish List
+          mqttPrepAndPublish(topicname);
+          closeSoftSSID();
+				  
+          
           
 				}
 
