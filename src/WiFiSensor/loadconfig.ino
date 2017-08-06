@@ -56,6 +56,7 @@ void createdefaultconfig() {
   calib["humidity-offset"] = "0";
   calib["temperature2-offset"] = "0";
   calib["humidity2-offset"] = "0";
+  calib["voltage-multiplier"} = "1";
   root["calibration"] = calib;
   
   StaticJsonBuffer<128> timingbuffer;
@@ -139,6 +140,11 @@ int loadconfig() {
     Serial.println("Error: Config does not contain 'update_rates'");
     return (1);
   }
+  if(!root.containsKey("voltage-multiplier")){
+    //String not found error case
+    Serial.println("Error: Config does not contain 'voltage-multiplier'");
+    return (1);
+  }
   
   // Use the JSON root object to assign the values to the global variables
   wifissid = root["wifi"]["ssid"].asString();
@@ -176,6 +182,7 @@ int loadconfig() {
   humidityoffset = root["calibration"]["humidity-offset"].as<float>();
   temp2offset = root["calibration"]["temperature2-offset"].as<float>();
   humidity2offset = root["calibration"]["humidity2-offset"].as<float>();
+  voltagemultiplier = root["calibration"]["voltage-multiplier"].as<float>();
   
   normalupdate = root["update_rates"]["normal_rate_s"].as<long>();
   deepsleepupdate = root["update_rates"]["deepsleep_rate_s"].as<long>();

@@ -36,6 +36,7 @@ float tempoffset;
 float humidityoffset;
 float temp2offset;
 float humidity2offset;
+float voltagemultiplier;
 int battvalue;
 long normalupdate = 30;
 long deepsleepupdate = 600;
@@ -56,7 +57,7 @@ bool dht2d6 = false;
 bool batt1a0 = false; 
 
 /* Software Version Management */
-String firmwareversion = "0.0.8";
+String firmwareversion = "0.0.9";
 
 /* PIN definitions */
 const int GREENLED = 4;
