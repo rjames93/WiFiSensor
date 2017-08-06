@@ -126,11 +126,11 @@ void landingPage() {
   html += String("<p>Firmware Version: ");
   html += firmwareversion;
   html += String("<h2>Last Measurement</h2>");
-  html += String("<p>Temperature (°C): ");
+  html += String("<p>Temperature (Â°C): ");
   html += String(lastmeasurement.temperature);
   html += String("<br><p>Relative Humidity (%): ");
   html += String(lastmeasurement.humidity);
-  html += String("<p>Temperature 2 (°C): ");
+  html += String("<p>Temperature 2 (Â°C): ");
   html += String(lastmeasurement.temperature2);
   html += String("<br><p>Relative Humidity 2 (%): ");
   html += String(lastmeasurement.humidity2);
@@ -150,3 +150,4 @@ void resetConfig() {
   SPIFFS.end();
   ESP.restart();
 }
+
