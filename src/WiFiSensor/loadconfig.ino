@@ -56,7 +56,7 @@ void createdefaultconfig() {
   calib["humidity-offset"] = "0";
   calib["temperature2-offset"] = "0";
   calib["humidity2-offset"] = "0";
-  calib["voltage-multiplier"} = "0.0152";
+  calib["voltage-multiplier"] = "0.0152";
   root["calibration"] = calib;
   
   StaticJsonBuffer<128> timingbuffer;
