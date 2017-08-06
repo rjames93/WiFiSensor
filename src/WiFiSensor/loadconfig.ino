@@ -50,7 +50,7 @@ void createdefaultconfig() {
   mqtt["humiditytopic"] = "humidity";
   root["mqtt-settings"] = mqtt;
   
-  StaticJsonBuffer<128> calbuffer;
+  StaticJsonBuffer<256> calbuffer;
   JsonObject &calib = calbuffer.createObject();
   calib["temperature-offset"] = "0";
   calib["humidity-offset"] = "0";
@@ -138,11 +138,6 @@ int loadconfig() {
   if(!root.containsKey("update_rates")){
     //String not found error case
     Serial.println("Error: Config does not contain 'update_rates'");
-    return (1);
-  }
-  if(!root.containsKey("voltage-multiplier")){
-    //String not found error case
-    Serial.println("Error: Config does not contain 'voltage-multiplier'");
     return (1);
   }
   
