@@ -169,14 +169,14 @@ void loop() {
         if(dht1d5){
           Serial.print("Temp: ");
           Serial.print(lastmeasurement.temperature);
-          Serial.print("Â°C, Relative Humidity: ");
+          Serial.print("°C, Relative Humidity: ");
           Serial.print(lastmeasurement.humidity);
           Serial.println("%");
         }
         if(dht2d6){
           Serial.print("Temp2: ");
           Serial.print(lastmeasurement.temperature2);
-          Serial.print("Â°C, Relative Humidity: ");
+          Serial.print("°C, Relative Humidity: ");
           Serial.print(lastmeasurement.humidity2);
           Serial.println("%");
         }

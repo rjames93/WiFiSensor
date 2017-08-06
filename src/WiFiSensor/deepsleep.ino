@@ -40,7 +40,7 @@ void deepsleep() {
   if (serialmode == true) { // Print to Serial
 			  Serial.print("Temp: ");
 			  Serial.print(lastmeasurement.temperature);
-			  Serial.print("ï¿½C, Relative Humidity: ");
+			  Serial.print("°C, Relative Humidity: ");
 			  Serial.print(lastmeasurement.humidity);
 			  Serial.println("%");
 			  //Serial.println(millis());
