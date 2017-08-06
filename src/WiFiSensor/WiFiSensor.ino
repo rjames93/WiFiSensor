@@ -54,7 +54,7 @@ bool ledGRNd1 = false;
 bool ledREDd2 = false;
 bool dht1d5 = true;
 bool dht2d6 = false;
-bool batt1a0 = false; 
+bool batt1a0 = false;
 
 /* Software Version Management */
 String firmwareversion = "0.0.9";
@@ -112,8 +112,8 @@ void setup() {
     case 0:
       // Normal Startup by Power On
       Serial.println("Normal Power On");
-	  dsWebOverride = true;
-	  dsOverrideCycleCount = 0;
+      dsWebOverride = true;
+      dsOverrideCycleCount = 0;
       ESP.restart();
       break;
     case 1:
@@ -124,14 +124,14 @@ void setup() {
     case 2:
       // Exception Reset, GPIO status won't change
       Serial.println("Exception Reset");
-	  dsWebOverride = true;
-	  dsOverrideCycleCount = 0;
+      dsWebOverride = true;
+      dsOverrideCycleCount = 0;
       ESP.restart();
       break;
     case 3:
       // Software watch dog reset, GPIO status won't change
       Serial.println("Software Watchdog");
-	  
+
       ESP.restart();
       break;
     case 4:
@@ -147,8 +147,8 @@ void setup() {
     case 6:
       // External System Reset
       Serial.println("External System Reset");
-	    dsWebOverride = true;
-	    dsOverrideCycleCount = 0;
+      dsWebOverride = true;
+      dsOverrideCycleCount = 0;
       extsysreset();
       break;
   }
@@ -156,106 +156,106 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
-	if(!deepsleepmode){
-		//DeepSleep Is disabled so enable Webserver
-		httpServer.handleClient();
-		 // This will reset every 30000 milliseconds a.k.a every 30 seconds by default
-		long timer = (millis() % (1000*normalupdate));
-		  
-		if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
-			dhtmeasure();
-			if (serialmode == true) { // Print to Serial
-        if(dht1d5){
+
+  if (!deepsleepmode) {
+    //DeepSleep Is disabled so enable Webserver
+    httpServer.handleClient();
+    // This will reset every 30000 milliseconds a.k.a every 30 seconds by default
+    long timer = (millis() % (1000 * normalupdate));
+
+    if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
+      dhtmeasure();
+      if (serialmode == true) { // Print to Serial
+        if (dht1d5) {
           Serial.print("Temp: ");
           Serial.print(lastmeasurement.temperature);
           Serial.print("°C, Relative Humidity: ");
           Serial.print(lastmeasurement.humidity);
           Serial.println("%");
         }
-        if(dht2d6){
+        if (dht2d6) {
           Serial.print("Temp2: ");
           Serial.print(lastmeasurement.temperature2);
           Serial.print("°C, Relative Humidity: ");
           Serial.print(lastmeasurement.humidity2);
           Serial.println("%");
         }
-        if(batt1a0){
+        if (batt1a0) {
           Serial.print("Voltage: ");
           Serial.print(lastmeasurement.voltage);
           Serial.println("V");
         }
-        
-			  
-			  //Serial.println(millis());
-			}
-
-			if (mqttmode == true) { // Send data to MQTT Broker
-			  Serial.println("Handling MQTT");
-			  if ( timer <= 100 ) {
-				Serial.println("Gathering Data");
-				// We need to report to the MQTT Server
-				if (mqttconnect() != 0) {
-				  Serial.println("Unable to connect to MQTT Server");
-				} else {
-				  // Connect to MQTT Server
-				  //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
-				  //Following is original
-				  String topicname("sensors/");
-				  topicname += String(sensorname);
-				  topicname += String("/");
-				 
-				  //MQTT Publish List
-          mqttPrepAndPublish(topicname);
-          closeSoftSSID();
-				  
-          
-          
-				}
 
 
-			  }
-			}
-		}
-	} else {
-		//If DeepSleep Enabled this is run 
-		if( dsWebOverride){
-			//After the Initial setup the web interface will be available for 60s and the green LED will flash
-			httpServer.handleClient();
-			// This will reset every 2000 milliseconds a.k.a every 2 seconds
-			long dstimer = (millis() % 2000);
-			if ( dsOverrideCycleCount == 0 ){
+        //Serial.println(millis());
+      }
+
+      if (mqttmode == true) { // Send data to MQTT Broker
+        Serial.println("Handling MQTT");
+        if ( timer <= 100 ) {
+          Serial.println("Gathering Data");
+          // We need to report to the MQTT Server
+          if (mqttconnect() != 0) {
+            Serial.println("Unable to connect to MQTT Server");
+          } else {
+            // Connect to MQTT Server
+            //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
+            //Following is original
+            String topicname("sensors/");
+            topicname += String(sensorname);
+            topicname += String("/");
+
+            //MQTT Publish List
+            mqttPrepAndPublish(topicname);
+            closeSoftSSID();
+
+
+
+          }
+
+
+        }
+      }
+    }
+  } else {
+    //If DeepSleep Enabled this is run
+    if ( dsWebOverride) {
+      //After the Initial setup the web interface will be available for 60s and the green LED will flash
+      httpServer.handleClient();
+      // This will reset every 2000 milliseconds a.k.a every 2 seconds
+      long dstimer = (millis() % 2000);
+      if ( dsOverrideCycleCount == 0 ) {
         dhtmeasure();
       }
-			if ( dstimer <= 100 ){
-				dsOverrideCycleCount++;
-			}
-			if ( dstimer <= 1000 ){
-				//Flashes the LED ON/OFF every second
-				if(ledGRNd1){
-					  digitalWrite(GREENLED, HIGH);
-				  }
-				  if(ledREDd2){
-					  digitalWrite(REDLED, HIGH);
-				  }
+      if ( dstimer <= 100 ) {
+        dsOverrideCycleCount++;
+      }
+      if ( dstimer <= 1000 ) {
+        //Flashes the LED ON/OFF every second
+        if (ledGRNd1) {
+          digitalWrite(GREENLED, HIGH);
+        }
+        if (ledREDd2) {
+          digitalWrite(REDLED, HIGH);
+        }
 
-			} else{
-				digitalWrite(GREENLED, LOW);
-				digitalWrite(REDLED, LOW);
-			}
-			delay(200);
-			if( dsOverrideCycleCount >= 30){
-				dsWebOverride = false;
-				Serial.println("Deep Sleep Web Override Finished, sleep for 10s");
-				digitalWrite(GREENLED, LOW);
-				digitalWrite(REDLED, LOW);
-				ESP.deepSleep(10 * 1000000);
-			}
-			
-		}
-	}
-		
-	
-	
+      } else {
+        digitalWrite(GREENLED, LOW);
+        digitalWrite(REDLED, LOW);
+      }
+      delay(200);
+      if ( dsOverrideCycleCount >= 30) {
+        dsWebOverride = false;
+        Serial.println("Deep Sleep Web Override Finished, sleep for 10s");
+        digitalWrite(GREENLED, LOW);
+        digitalWrite(REDLED, LOW);
+        ESP.deepSleep(10 * 1000000);
+      }
+
+    }
+  }
+
+
+
 }
 
