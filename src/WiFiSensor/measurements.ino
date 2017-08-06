@@ -58,7 +58,7 @@ void dhtmeasure(){
   }
 
   if(batt1a0){
-    lastmeasurement.voltage = analogRead(BATTPIN)*voltagemultiplier;
+    lastmeasurement.voltage = analogRead(BATTPIN)* voltagemultiplier;
   }
 }
 

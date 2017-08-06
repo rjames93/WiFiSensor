@@ -224,6 +224,9 @@ void loop() {
 			httpServer.handleClient();
 			// This will reset every 2000 milliseconds a.k.a every 2 seconds
 			long dstimer = (millis() % 2000);
+			if ( dsOverrideCycleCount == 0 ){
+        dhtmeasure();
+      }
 			if ( dstimer <= 100 ){
 				dsOverrideCycleCount++;
 			}
