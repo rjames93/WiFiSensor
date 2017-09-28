@@ -33,6 +33,9 @@ void extsysreset() {
       digitalWrite(REDLED, HIGH);
     }
 	}
+  } else{
+    // Connected Successfully
+    digitalWrite(REDLED, LOW);
   }
 
   

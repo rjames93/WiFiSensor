@@ -2,6 +2,9 @@ void deepsleep() {
   if (!configloaded) {
     loadconfig();
   }
+  // DeepSleep normal mode LEDS should always be disabled
+  digitalWrite(REDLED, LOW);
+  digitalWrite(GREENLED, LOW);
   
   bool mqttconnectsuccess = false;
   bool mqtttimeout = false;
@@ -9,16 +12,14 @@ void deepsleep() {
   
   if ( !trySTAWiFi() ) {
     // STA Failed so load softAP
-    Serial.println("Wireless Station Failed");
-    if(ledREDd2){
-      digitalWrite(REDLED, HIGH);
-    }
+    Serial.println("Wireless Station Failed 1 of 2");
     delay(2000);
 	if ( !trySTAWiFi()  ) {
-		Serial.println("SoftAP failed 2");
+		Serial.println("Wireless Station Failed 2 of 2");
 		Serial.println("Give Up and DeepSleep");
-		digitalWrite(REDLED, LOW);
-		digitalWrite(GREENLED, LOW);
+    Serial.print("ESP Sleep for ");
+    Serial.print(deepsleepupdate);
+    Serial.print(" seconds.");
 		ESP.deepSleep(deepsleepupdate * 1000000);
 	}
   }
@@ -65,7 +66,7 @@ void deepsleep() {
 		  mqttconnectsuccess = true;
 	  }
 	  
-	  if(mqttfailcount >= 30 ){
+	  if(mqttfailcount >= 10 ){
 		  Serial.println("Giving up MQTT connection" );
 		  mqtttimeout = true;
 	  }
@@ -92,8 +93,6 @@ void deepsleep() {
   Serial.print(deepsleepupdate);
   Serial.print(" seconds.");
 
-  digitalWrite(REDLED, LOW);
-  digitalWrite(GREENLED, LOW);
   ESP.deepSleep(deepsleepupdate * 1000000);
 }
 

@@ -17,8 +17,8 @@ void dhtmeasure(){
 			Serial.println("DHT Not Ready");
 			delay(200);
 		}
-		if(retries == 200){
-			// Give up after 200 tries
+		if(retries == 100){
+			// Give up after 100 tries
 			dhtOK = true;
 		}
 	

@@ -57,7 +57,7 @@ bool dht2d6 = false;
 bool batt1a0 = false;
 
 /* Software Version Management */
-String firmwareversion = "0.0.9";
+String firmwareversion = "0.1.0";
 
 /* PIN definitions */
 const int GREENLED = 4;
@@ -78,6 +78,9 @@ void setup() {
   Serial.println("");
   Serial.println("");
   Serial.println("Sensor Starting");
+  Serial.println("Version");
+  Serial.println(firmwareversion);
+  Serial.println("Information and issues at https://github.com/brickmen/WiFiSensorl");
   delay(500);
   configloaded = false;
   /* This is for FS debugging only */
