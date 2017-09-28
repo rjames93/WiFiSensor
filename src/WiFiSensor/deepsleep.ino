@@ -39,13 +39,26 @@ void deepsleep() {
   dhtmeasure();
   
   if (serialmode == true) { // Print to Serial
-			  Serial.print("Temp: ");
-			  Serial.print(lastmeasurement.temperature);
-			  Serial.print("°C, Relative Humidity: ");
-			  Serial.print(lastmeasurement.humidity);
-			  Serial.println("%");
-			  //Serial.println(millis());
-			}
+          if (dht1d5) {
+            Serial.print("Temp: ");
+            Serial.print(lastmeasurement.temperature);
+            Serial.print("°C, Relative Humidity: ");
+            Serial.print(lastmeasurement.humidity);
+            Serial.println("%");
+          }
+          if (dht2d6) {
+            Serial.print("Temp2: ");
+            Serial.print(lastmeasurement.temperature2);
+            Serial.print("°C, Relative Humidity: ");
+            Serial.print(lastmeasurement.humidity2);
+            Serial.println("%");
+          }
+          if (batt1a0) {
+            Serial.print("Voltage: ");
+            Serial.print(lastmeasurement.voltage);
+            Serial.println("V");
+          }
+	}
   
   // Basically Deepsleep needs MQTT on in order to do stuff else it's going to do nothing cause it won't be able to respond to http requests
 

@@ -259,13 +259,10 @@ void loop() {
         dsOverrideCycleCount++;
       }
       if ( dstimer <= 1000 ) {
-        //Flashes the LED ON/OFF every second
-        if (ledGRNd1) {
-          digitalWrite(GREENLED, HIGH);
-        }
-        if (ledREDd2) {
-          digitalWrite(REDLED, HIGH);
-        }
+        //Flashes the LED ON/OFF every second overriding the LED control
+        digitalWrite(GREENLED, HIGH);
+        digitalWrite(REDLED, HIGH);
+
 
       } else {
         digitalWrite(GREENLED, LOW);
