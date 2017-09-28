@@ -27,6 +27,51 @@ int mqttconnect(){
     // Client connected successfully
     return(0);
   } else {
-    return(1);
+    Serial.println("Unable To Connect, Details: ");
+    Serial.println("  mqttclientname: ");
+    Serial.println(mqttclientname);
+    Serial.println("  mqttusername: ");
+    Serial.println(mqttusername);
+    Serial.println("  mqttpassword: ");
+    Serial.println(mqttpassword);
+    Serial.println(" ");
+    return(2);
   }
 }
+
+void mqttPrepAndPublish(String topicname){
+  if(dht1d5){
+    snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
+    mqttpublish((topicname + mqtttemperaturetopic), msg);
+    snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
+    mqttpublish((topicname + mqtthumiditytopic), msg);
+  }
+  if(dht2d6){
+    snprintf(msg, 25, "%s", String(lastmeasurement.temperature2).c_str());
+    mqttpublish((topicname + mqtttemperaturetopic +"2"), msg);
+    snprintf(msg, 75, "%s", String(lastmeasurement.humidity2).c_str());
+    mqttpublish((topicname + mqtthumiditytopic+"2"), msg);
+  }
+  if(batt1a0){
+    snprintf(msg, 25, "%s", String(lastmeasurement.voltage).c_str());
+    mqttpublish((topicname + "voltage"), msg);
+  }
+}
+
+int mqttpublish(String topic, const char* msg ){
+  if(client.publish( topic.c_str(), msg)){
+      Serial.println( "Successful MQTT Update");
+      return 0;
+  }else{
+      Serial.println( "Failed MQTT Update, Details:");
+      Serial.println("  topic: ");
+      Serial.println(topic);
+      Serial.println("  msg: ");
+      Serial.println(msg );
+      Serial.println(" ");
+      return 1;
+  }
+}
+  
+
+

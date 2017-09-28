@@ -2,38 +2,63 @@ void extsysreset() {
   // Create the default Config
   createdefaultconfig();
   // Load the Config
-  loadconfig();
+  if(loadconfig()== 1){
+    SPIFFS.begin();
+    Serial.println("Deleting Custom Config");
+    SPIFFS.remove("/configuration.cfg");
+    Serial.println("Deleting Default Config");
+    SPIFFS.remove("/default.cfg");
+    SPIFFS.end();
+    createdefaultconfig();
+    if(loadconfig()== 1){
+      Serial.println("Failed on second Try, setting fallback values");
+      wifissid = "SmartSensor";
+      normalupdate = 30;
+    }
+  }
   // Config is now loaded.
   delay(1000);
   // Try connecting to the WiFi using the config file
   if ( !trySTAWiFi() ) {
-    // STA Failed
+    // STA Failed so load softAP
     Serial.println("Wireless Station Failed");
     Serial.println("Now try a SoftAP");
-    digitalWrite(REDLED, HIGH);
+    if(ledREDd2){
+      digitalWrite(REDLED, HIGH);
+    }
     delay(1000);
+	if ( !trySoftSSID()  ) {
+		Serial.println("SoftAP failed");
+    if(ledREDd2){
+      digitalWrite(REDLED, HIGH);
+    }
+	}
+  } else{
+    // Connected Successfully
+    digitalWrite(REDLED, LOW);
   }
 
-  if ( !trySoftSSID()  ) {
-    Serial.println("SoftAP failed");
-    digitalWrite(REDLED, HIGH);
-  }
+  
 
   //  Setup mqtt
   if (setupMQTT() == 1){
     // Ignore this outcome it hasn't done anything
   } else {
     // We have setupMQTT
-    if( !mqttconnect() ){
+    if( mqttconnect() != 0 ){
       // Haven't been able to connect :|
       // Handle this exception. Probably reload?
+      Serial.println("Unable to connect to MQTT after reset");
 
     }
   }
 
   // Should now be connected to the MQTT Server
 
-  digitalWrite(GREENLED, HIGH);
+  if(ledGRNd1){
+    digitalWrite(GREENLED, HIGH);
+  }
+
   // Setup the WebServer
   httpUpdater.setup(&httpServer);
   httpServer.on("/config", httpConfigure);
@@ -52,3 +77,4 @@ void extsysreset() {
     memset( msg, 0, sizeof( msg ) );
   }
 }
+

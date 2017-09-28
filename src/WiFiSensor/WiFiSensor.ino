@@ -32,21 +32,45 @@ String mqttusername;
 String mqttpassword;
 String mqtthumiditytopic;
 String mqtttemperaturetopic;
+float tempoffset;
+float humidityoffset;
+float temp2offset;
+float humidity2offset;
+float voltagemultiplier;
+int battvalue;
+long normalupdate = 30;
+long deepsleepupdate = 600;
 bool deepsleepmode = false;
 bool mqttmode = false;
 bool serialmode = false;
 bool configloaded = false;
+bool dsWebOverride = true;
+int dsOverrideCycleCount = 0;
 long lastmodification = 0;
 struct measurements lastmeasurement;
+
+/* board configuation booleans */
+bool ledGRNd1 = false;
+bool ledREDd2 = false;
+bool dht1d5 = true;
+bool dht2d6 = false;
+bool batt1a0 = false;
+
+/* Software Version Management */
+String firmwareversion = "0.1.0";
 
 /* PIN definitions */
 const int GREENLED = 4;
 const int REDLED = 5;
 const int DHTPIN = 14;
+const int DHT2PIN = 12;
+const int BATTPIN = A0;
+
 
 /* DHT Class */
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
+DHT dht2(DHT2PIN, DHTTYPE);
 
 void setup() {
 
@@ -54,6 +78,9 @@ void setup() {
   Serial.println("");
   Serial.println("");
   Serial.println("Sensor Starting");
+  Serial.println("Version");
+  Serial.println(firmwareversion);
+  Serial.println("Information and issues at https://github.com/brickmen/WiFiSensorl");
   delay(500);
   configloaded = false;
   /* This is for FS debugging only */
@@ -77,7 +104,6 @@ void setup() {
   Serial.println("");
   pinMode(GREENLED, OUTPUT);
   pinMode(REDLED, OUTPUT);
-
   digitalWrite(GREENLED, LOW);
   digitalWrite(REDLED, LOW);
 
@@ -89,6 +115,8 @@ void setup() {
     case 0:
       // Normal Startup by Power On
       Serial.println("Normal Power On");
+      dsWebOverride = true;
+      dsOverrideCycleCount = 0;
       ESP.restart();
       break;
     case 1:
@@ -99,11 +127,14 @@ void setup() {
     case 2:
       // Exception Reset, GPIO status won't change
       Serial.println("Exception Reset");
+      dsWebOverride = true;
+      dsOverrideCycleCount = 0;
       ESP.restart();
       break;
     case 3:
       // Software watch dog reset, GPIO status won't change
       Serial.println("Software Watchdog");
+
       ESP.restart();
       break;
     case 4:
@@ -119,6 +150,8 @@ void setup() {
     case 6:
       // External System Reset
       Serial.println("External System Reset");
+      dsWebOverride = true;
+      dsOverrideCycleCount = 0;
       extsysreset();
       break;
   }
@@ -126,35 +159,128 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  httpServer.handleClient();
-  long timer = (millis() % 30000); // This will reset every 30000 milliseconds a.k.a every 30 seconds
-  if ( timer <= 100 ) {
-    dhtmeasure();
-    if (serialmode == true) {
-      Serial.print("Temp: ");
-      Serial.print(lastmeasurement.temperature);
-      Serial.print("°C, Relative Humidity: ");
-      Serial.print(lastmeasurement.humidity);
-      Serial.println("%");
-      //Serial.println(millis());
-    }
 
-    if (mqttmode == true) {
-      if ( timer <= 100 ) {
-        // We need to report to the MQTT Server
-        if(!mqttconnect()){
-          Serial.print("Unable to connect to MQTT Server");
+  if (!deepsleepmode) {
+    //DeepSleep Is disabled so enable Webserver
+    httpServer.handleClient();
+    // This will reset every 30000 milliseconds a.k.a every 30 seconds by default
+    long timer = (millis() % (1000 * normalupdate));
+
+    if ( timer <= 100 ) { // This if statement allows for some variance in the timing for each loop. Could be tuned down further but I don't really see the issue of a 0.1 second variance in when the data 'could' be measured.
+      dhtmeasure();
+      if (serialmode == true) { // Print to Serial
+        if (dht1d5) {
+          Serial.print("Temp: ");
+          Serial.print(lastmeasurement.temperature);
+          Serial.print("°C, Relative Humidity: ");
+          Serial.print(lastmeasurement.humidity);
+          Serial.println("%");
         }
-        // Connected to MQTT Server
-        String topicname("sensors/");
-        topicname += String(sensorname);
-        topicname += String("/");
-        snprintf(msg, 25, "%s", String(lastmeasurement.temperature).c_str());
-        client.publish( (topicname + mqtttemperaturetopic).c_str(), msg);
-        snprintf(msg, 75, "%s", String(lastmeasurement.humidity).c_str());
-        client.publish((topicname + mqtthumiditytopic).c_str(), msg);
+        if (dht2d6) {
+          Serial.print("Temp2: ");
+          Serial.print(lastmeasurement.temperature2);
+          Serial.print("°C, Relative Humidity: ");
+          Serial.print(lastmeasurement.humidity2);
+          Serial.println("%");
+        }
+        if (batt1a0) {
+          Serial.print("Voltage: ");
+          Serial.print(lastmeasurement.voltage);
+          Serial.println("V");
+        }
+
+
+        //Serial.println(millis());
+      }
+
+      if (mqttmode == true) { // Send data to MQTT Broker
+        Serial.println("Handling MQTT");
+        if ( timer <= 100 ) {
+          Serial.println("Gathering Data");
+          // We need to report to the MQTT Server
+          if (mqttconnect() != 0) {
+            Serial.println("Unable to connect to MQTT Server");
+          } else {
+            // Connect to MQTT Server
+            //client.connect(mqttclientname.c_str(), mqttusername.c_str(), mqttpassword.c_str() );
+            //Following is original
+            String topicname("sensors/");
+            topicname += String(sensorname);
+            topicname += String("/");
+
+            //MQTT Publish List
+            mqttPrepAndPublish(topicname);
+            closeSoftSSID();
+
+
+
+          }
+
+
+        }
       }
     }
-    //delay(250);
+  } else {
+    //If DeepSleep Enabled this is run
+    if ( dsWebOverride) {
+      //After the Initial setup the web interface will be available for 60s and the green LED will flash
+      httpServer.handleClient();
+      // This will reset every 2000 milliseconds a.k.a every 2 seconds
+      long dstimer = (millis() % 2000);
+      if ( dsOverrideCycleCount == 0 ) {
+       dhtmeasure();
+        if (serialmode == true) { // Print to Serial
+          if (dht1d5) {
+            Serial.print("Temp: ");
+            Serial.print(lastmeasurement.temperature);
+            Serial.print("°C, Relative Humidity: ");
+            Serial.print(lastmeasurement.humidity);
+            Serial.println("%");
+          }
+          if (dht2d6) {
+            Serial.print("Temp2: ");
+            Serial.print(lastmeasurement.temperature2);
+            Serial.print("°C, Relative Humidity: ");
+            Serial.print(lastmeasurement.humidity2);
+            Serial.println("%");
+          }
+          if (batt1a0) {
+            Serial.print("Voltage: ");
+            Serial.print(lastmeasurement.voltage);
+            Serial.println("V");
+          }
+          dsOverrideCycleCount++;
+          //Serial.println(millis());
+        }
+      }
+      if ( dstimer <= 100 ) {
+        Serial.print("Count:");
+        Serial.println(dsOverrideCycleCount);
+        dsOverrideCycleCount++;
+      }
+      if ( dstimer <= 1000 ) {
+        //Flashes the LED ON/OFF every second overriding the LED control
+        digitalWrite(GREENLED, HIGH);
+        digitalWrite(REDLED, HIGH);
+
+
+      } else {
+        digitalWrite(GREENLED, LOW);
+        digitalWrite(REDLED, LOW);
+      }
+      delay(200);
+      if ( dsOverrideCycleCount >= 30) {
+        dsWebOverride = false;
+        Serial.println("Deep Sleep Web Override Finished, sleep for 10s");
+        digitalWrite(GREENLED, LOW);
+        digitalWrite(REDLED, LOW);
+        ESP.deepSleep(10 * 1000000);
+      }
+
+    }
   }
+
+
+
 }
+

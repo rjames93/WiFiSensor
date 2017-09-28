@@ -19,7 +19,7 @@ void httpConfigure() {
   char *jsstr = (char *)malloc(jsstrlength * sizeof(char) + 1);
   strcpy(jsstr, confjson.c_str());
   Serial.println(jsstr);
-  StaticJsonBuffer<512> jsonBuffer;
+  DynamicJsonBuffer jsonBuffer;
   JsonObject &root = jsonBuffer.parseObject(jsstr);
   if (!root.success()) {
     Serial.println("JSON Parsing fail");
@@ -56,7 +56,7 @@ void httpConfigure() {
 
 void testandapplyconfig() {
   SPIFFS.begin();
-  StaticJsonBuffer<512> httpjsonBuffer;
+  DynamicJsonBuffer httpjsonBuffer;
   int lengthofinput = httpServer.arg(0).length();
   Serial.println(lengthofinput);
   char *string = (char *)malloc( (lengthofinput + 1) * sizeof(char) );
@@ -123,11 +123,19 @@ void landingPage() {
   html += String("</title></head><body><h1>");
   html += sensorname;
   html += String(" Status</h1><br>");
+  html += String("<p>Firmware Version: ");
+  html += firmwareversion;
   html += String("<h2>Last Measurement</h2>");
   html += String("<p>Temperature (°C): ");
   html += String(lastmeasurement.temperature);
   html += String("<br><p>Relative Humidity (%): ");
   html += String(lastmeasurement.humidity);
+  html += String("<p>Temperature 2 (°C): ");
+  html += String(lastmeasurement.temperature2);
+  html += String("<br><p>Relative Humidity 2 (%): ");
+  html += String(lastmeasurement.humidity2);
+  html += String("<br><p>Voltage (V): ");
+  html += String(lastmeasurement.voltage);
   html += String("<br><hr><br><h2> Other Links: <ul><li><a href=\"/config\"> Configuration Page</a></li><li><a href=\"/update\"> Firmware Updater</a></li></ul>");
   html += String("</body></html>");
   Serial.println("/ Requested");
@@ -142,3 +150,4 @@ void resetConfig() {
   SPIFFS.end();
   ESP.restart();
 }
+
