@@ -228,33 +228,34 @@ void loop() {
       // This will reset every 2000 milliseconds a.k.a every 2 seconds
       long dstimer = (millis() % 2000);
       if ( dsOverrideCycleCount == 0 ) {
-        dhtmeasure();
+       dhtmeasure();
         if (serialmode == true) { // Print to Serial
-        if (dht1d5) {
-          Serial.print("Temp: ");
-          Serial.print(lastmeasurement.temperature);
-          Serial.print("°C, Relative Humidity: ");
-          Serial.print(lastmeasurement.humidity);
-          Serial.println("%");
+          if (dht1d5) {
+            Serial.print("Temp: ");
+            Serial.print(lastmeasurement.temperature);
+            Serial.print("°C, Relative Humidity: ");
+            Serial.print(lastmeasurement.humidity);
+            Serial.println("%");
+          }
+          if (dht2d6) {
+            Serial.print("Temp2: ");
+            Serial.print(lastmeasurement.temperature2);
+            Serial.print("°C, Relative Humidity: ");
+            Serial.print(lastmeasurement.humidity2);
+            Serial.println("%");
+          }
+          if (batt1a0) {
+            Serial.print("Voltage: ");
+            Serial.print(lastmeasurement.voltage);
+            Serial.println("V");
+          }
+          dsOverrideCycleCount++;
+          //Serial.println(millis());
         }
-        if (dht2d6) {
-          Serial.print("Temp2: ");
-          Serial.print(lastmeasurement.temperature2);
-          Serial.print("°C, Relative Humidity: ");
-          Serial.print(lastmeasurement.humidity2);
-          Serial.println("%");
-        }
-        if (batt1a0) {
-          Serial.print("Voltage: ");
-          Serial.print(lastmeasurement.voltage);
-          Serial.println("V");
-        }
-
-
-        //Serial.println(millis());
-      }
       }
       if ( dstimer <= 100 ) {
+        Serial.print("Count:");
+        Serial.println(dsOverrideCycleCount);
         dsOverrideCycleCount++;
       }
       if ( dstimer <= 1000 ) {
